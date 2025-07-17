@@ -1,4 +1,5 @@
 // Authentication Service - Business Logic Layer
+// Updated for Spogpaws API structure
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import {
@@ -7,7 +8,6 @@ import {
   LoginRequest,
   RegisterRequest,
   LoadingState,
-  ApiError,
 } from '@/types';
 import { repositoryFactory } from '@/repositories';
 
@@ -20,13 +20,9 @@ interface AuthState {
   
   // Actions
   login: (credentials: LoginRequest) => Promise<UserDto>;
-  register: (userData: RegisterRequest) => Promise<UserDto>;
+  register: (userData: RegisterRequest) => Promise<void>;
   logout: () => Promise<void>;
-  refreshToken: () => Promise<void>;
-  verifyEmail: (token: string) => Promise<void>;
-  forgotPassword: (email: string) => Promise<void>;
-  resetPassword: (token: string, newPassword: string) => Promise<void>;
-  getCurrentUser: () => Promise<UserDto>;
+  getCurrentUser: () => Promise<UserDto | null>;
   initializeAuth: () => Promise<void>;
   clearError: () => void;
   setLoading: (isLoading: boolean, error?: string) => void;
@@ -53,8 +49,15 @@ export const useAuthStore = create<AuthState>()(
           
           const response = await authRepo.login(credentials);
           
-          if (response.success && response.data) {
-            const user = response.data.user;
+          if (response.status === 'success' && response.data) {
+            const { email, name, role, user_id } = response.data;
+            const user: UserDto = { id: user_id, email, name, role };
+            
+            // Store user data
+            if (typeof window !== 'undefined') {
+              localStorage.setItem('user', JSON.stringify(user));
+            }
+            
             set({
               user,
               isAuthenticated: true,
@@ -75,7 +78,7 @@ export const useAuthStore = create<AuthState>()(
         }
       },
 
-      register: async (userData: RegisterRequest): Promise<UserDto> => {
+      register: async (userData: RegisterRequest): Promise<void> => {
         const authRepo = repositoryFactory.getAuthRepository();
         
         try {
@@ -83,14 +86,8 @@ export const useAuthStore = create<AuthState>()(
           
           const response = await authRepo.register(userData);
           
-          if (response.success && response.data) {
-            const user = response.data.user;
-            set({
-              user,
-              isAuthenticated: true,
-              loading: { isLoading: false, error: null },
-            });
-            return user;
+          if (response.status === 'success') {
+            set({ loading: { isLoading: false, error: null } });
           } else {
             throw new Error(response.message || 'Registration failed');
           }
@@ -98,8 +95,6 @@ export const useAuthStore = create<AuthState>()(
           const errorMessage = error.message || 'Registration failed';
           set({
             loading: { isLoading: false, error: errorMessage },
-            isAuthenticated: false,
-            user: null,
           });
           throw error;
         }
@@ -112,7 +107,6 @@ export const useAuthStore = create<AuthState>()(
           set({ loading: { isLoading: true, error: null } });
           await authRepo.logout();
         } catch (error) {
-          // Continue with logout even if API call fails
           console.warn('Logout API call failed, but continuing with local logout');
         } finally {
           set({
@@ -123,114 +117,22 @@ export const useAuthStore = create<AuthState>()(
         }
       },
 
-      refreshToken: async (): Promise<void> => {
-        const authRepo = repositoryFactory.getAuthRepository() as any;
-        
-        try {
-          const refreshToken = authRepo.getRefreshTokenValue();
-          if (!refreshToken) {
-            throw new Error('No refresh token available');
-          }
-
-          const response = await authRepo.refreshToken({ refreshToken });
-          
-          if (response.success && response.data) {
-            set({
-              user: response.data.user,
-              isAuthenticated: true,
-            });
-          } else {
-            throw new Error('Token refresh failed');
-          }
-        } catch (error) {
-          // If refresh fails, logout user
-          set({
-            user: null,
-            isAuthenticated: false,
-            loading: { isLoading: false, error: 'Session expired' },
-          });
-          throw error;
-        }
-      },
-
-      verifyEmail: async (token: string): Promise<void> => {
+      getCurrentUser: async (): Promise<UserDto | null> => {
         const authRepo = repositoryFactory.getAuthRepository();
         
         try {
-          set({ loading: { isLoading: true, error: null } });
-          
-          await authRepo.verifyEmail(token);
-          
-          // Update user verification status if user is logged in
-          const currentUser = get().user;
-          if (currentUser) {
-            set({
-              user: { ...currentUser, isVerified: true },
-              loading: { isLoading: false, error: null },
-            });
-          } else {
-            set({ loading: { isLoading: false, error: null } });
-          }
-        } catch (error: any) {
-          const errorMessage = error.message || 'Email verification failed';
-          set({ loading: { isLoading: false, error: errorMessage } });
-          throw error;
-        }
-      },
-
-      forgotPassword: async (email: string): Promise<void> => {
-        const authRepo = repositoryFactory.getAuthRepository();
-        
-        try {
-          set({ loading: { isLoading: true, error: null } });
-          await authRepo.forgotPassword(email);
-          set({ loading: { isLoading: false, error: null } });
-        } catch (error: any) {
-          const errorMessage = error.message || 'Password reset request failed';
-          set({ loading: { isLoading: false, error: errorMessage } });
-          throw error;
-        }
-      },
-
-      resetPassword: async (token: string, newPassword: string): Promise<void> => {
-        const authRepo = repositoryFactory.getAuthRepository();
-        
-        try {
-          set({ loading: { isLoading: true, error: null } });
-          await authRepo.resetPassword(token, newPassword);
-          set({ loading: { isLoading: false, error: null } });
-        } catch (error: any) {
-          const errorMessage = error.message || 'Password reset failed';
-          set({ loading: { isLoading: false, error: errorMessage } });
-          throw error;
-        }
-      },
-
-      getCurrentUser: async (): Promise<UserDto> => {
-        const authRepo = repositoryFactory.getAuthRepository();
-        
-        try {
-          set({ loading: { isLoading: true, error: null } });
-          
           const response = await authRepo.getCurrentUser();
           
-          if (response.success && response.data) {
+          if (response.status === 'success' && response.data) {
             set({
               user: response.data,
               isAuthenticated: true,
-              loading: { isLoading: false, error: null },
             });
             return response.data;
-          } else {
-            throw new Error('Failed to get current user');
           }
+          return null;
         } catch (error: any) {
-          set({
-            user: null,
-            isAuthenticated: false,
-            loading: { isLoading: false, error: error.message },
-          });
-          throw error;
+          return null;
         }
       },
 
@@ -314,12 +216,8 @@ export class AuthService {
   async validateRegistrationForm(userData: RegisterRequest): Promise<string[]> {
     const errors: string[] = [];
 
-    if (!userData.firstName.trim()) {
-      errors.push('First name is required');
-    }
-
-    if (!userData.lastName.trim()) {
-      errors.push('Last name is required');
+    if (!userData.name.trim()) {
+      errors.push('Name is required');
     }
 
     if (!userData.email) {
@@ -335,12 +233,6 @@ export class AuthService {
       errors.push(...passwordErrors);
     }
 
-    if (!userData.phoneNumber) {
-      errors.push('Phone number is required');
-    } else if (!this.isValidPhoneNumber(userData.phoneNumber)) {
-      errors.push('Please enter a valid phone number');
-    }
-
     if (!userData.role) {
       errors.push('Please select a role');
     }
@@ -351,11 +243,6 @@ export class AuthService {
   private isValidEmail(email: string): boolean {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
-  }
-
-  private isValidPhoneNumber(phone: string): boolean {
-    const phoneRegex = /^\+?[\d\s\-\(\)]{10,}$/;
-    return phoneRegex.test(phone.replace(/\s/g, ''));
   }
 
   private validatePassword(password: string): string[] {
@@ -377,10 +264,6 @@ export class AuthService {
       errors.push('Password must contain at least one number');
     }
 
-    if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
-      errors.push('Password must contain at least one special character');
-    }
-
     return errors;
   }
 
@@ -398,20 +281,12 @@ export class AuthService {
     return user?.role === role;
   }
 
-  isVet(): boolean {
-    return this.hasRole('VET');
-  }
-
-  isPetOwner(): boolean {
-    return this.hasRole('PET_OWNER');
-  }
-
   isAdmin(): boolean {
     return this.hasRole('ADMIN');
   }
 
-  isShelter(): boolean {
-    return this.hasRole('SHELTER');
+  isUser(): boolean {
+    return this.hasRole('USER');
   }
 }
 

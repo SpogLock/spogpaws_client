@@ -1,556 +1,427 @@
-# 🐾 Spog Paws - Enterprise Pet Care Platform
+# Spogpaws Client
 
-A comprehensive Next.js platform connecting veterinarians with pet owners, facilitating pet adoptions, and providing quality pet care products. Built with **clean architecture** following **SOLID principles** for enterprise-level scalability.
-
-## 🏗️ Architecture Overview
-
-This project implements a **layered architecture** that ensures separation of concerns, maintainability, and testability:
-
-```
-┌─────────────────────────────────────────────────────────┐
-│                    UI Layer (React)                     │
-│  ┌─────────────────┐ ┌─────────────────┐ ┌──────────┐   │
-│  │    Components   │ │      Pages      │ │  Hooks   │   │
-│  └─────────────────┘ └─────────────────┘ └──────────┘   │
-└─────────────────────────────────────────────────────────┘
-┌─────────────────────────────────────────────────────────┐
-│                Service Layer (Business Logic)           │
-│  ┌─────────────────┐ ┌─────────────────┐ ┌──────────┐   │
-│  │ State Management│ │ Business Rules  │ │Validation│   │
-│  │   (Zustand)     │ │                 │ │          │   │
-│  └─────────────────┘ └─────────────────┘ └──────────┘   │
-└─────────────────────────────────────────────────────────┘
-┌─────────────────────────────────────────────────────────┐
-│              Repository Layer (Data Access)             │
-│  ┌─────────────────┐ ┌─────────────────┐ ┌──────────┐   │
-│  │  HTTP Client    │ │  Repositories   │ │  Cache   │   │
-│  │   (Axios)       │ │                 │ │(R.Query) │   │
-│  └─────────────────┘ └─────────────────┘ └──────────┘   │
-└─────────────────────────────────────────────────────────┘
-┌─────────────────────────────────────────────────────────┐
-│                Types & Models Layer                     │
-│  ┌─────────────────┐ ┌─────────────────┐ ┌──────────┐   │
-│  │ Domain Models   │ │    API DTOs     │ │Interfaces│   │
-│  │   (Entities)    │ │                 │ │          │   │
-│  └─────────────────┘ └─────────────────┘ └──────────┘   │
-└─────────────────────────────────────────────────────────┘
-```
+A Next.js client application for the Spogpaws veterinary platform, featuring user management, clinic administration, and pet adoption services.
 
 ## 🚀 Quick Start
 
-### Prerequisites
-- Node.js 18+ 
-- npm or yarn
-- Spring Boot backend API
-
-### Installation
-
-1. **Clone and install dependencies:**
 ```bash
+# Clone the repository
 git clone <repository-url>
 cd spogpaws_client
+
+# Install dependencies
 npm install
-```
 
-2. **Set up environment variables:**
-```bash
-# Create .env.local file
-NEXT_PUBLIC_API_BASE_URL=http://localhost:8080/api/v1
-NEXT_PUBLIC_API_TIMEOUT=30000
-NEXT_PUBLIC_API_RETRY_ATTEMPTS=3
-NEXT_PUBLIC_API_RETRY_DELAY=1000
-```
+# Set up environment variables
+cp .env.example .env.local
+# Edit .env.local with your API configuration
 
-3. **Run the development server:**
-```bash
+# Start development server
 npm run dev
 ```
 
-4. **Open your browser:**
-```
-http://localhost:3000
-```
+Visit `http://localhost:3000` to see the application.
 
-The application will show a demo with the architecture working. The login form demonstrates the complete flow from UI → Service → Repository layers.
+## 📋 Project Overview
 
-## 📁 Project Structure
+This application provides a modern, responsive web interface for the Spogpaws platform, built with Next.js 14 and TypeScript. The architecture has been carefully designed to align with the documented Spogpaws API structure, focusing on three core modules:
+
+- **👥 User Management** - Authentication, user profiles, and account management
+- **🏥 Clinic Management** - Veterinary clinic registration and administration  
+- **🐕 Pet Adoption** - Pet adoption listings and management
+
+## 🏗️ Architecture Overview
+
+### Clean Layered Architecture
 
 ```
 src/
-├── app/                    # Next.js 13+ App Router
+├── app/                    # Next.js 14 app directory
 │   ├── layout.tsx         # Root layout with providers
-│   ├── page.tsx           # Home page (architecture demo)
-│   └── globals.css        # Global styles
-├── components/            # UI Components
+│   ├── page.tsx           # Landing page with navigation
+│   └── globals.css        # TailwindCSS global styles
+├── components/            # React components
 │   ├── ui/               # Reusable UI components
-│   │   ├── button.tsx    # Button component
-│   │   └── input.tsx     # Input component
+│   │   ├── button.tsx    # Styled button component
+│   │   └── input.tsx     # Form input component
 │   └── features/         # Feature-specific components
-│       └── auth/         # Authentication components
-│           └── login-form.tsx
-├── hooks/                # Custom React hooks
-│   └── use-auth.ts      # Authentication hook
-├── lib/                  # Shared libraries
-│   ├── api-config.ts    # API configuration
-│   ├── http-client.ts   # HTTP client implementation
-│   └── providers.tsx    # Global providers
+│       ├── auth/         # Authentication components
+│       │   └── login-form.tsx
+│       ├── clinic/       # Clinic management
+│       │   └── clinic-list.tsx
+│       └── adoption/     # Pet adoption
+│           └── adoption-list.tsx
+├── services/             # Business logic with Zustand stores
+│   ├── auth.service.ts   # Authentication & user state
+│   ├── clinic.service.ts # Clinic operations & state
+│   └── adoption.service.ts # Adoption management & state
 ├── repositories/         # Data access layer
-│   ├── base.repository.ts      # Base repository class
-│   ├── auth.repository.ts      # Authentication repository
-│   ├── vet.repository.ts       # Veterinarian repository
-│   └── index.ts               # Repository factory
-├── services/             # Business logic layer
-│   └── auth.service.ts   # Authentication service
-└── types/               # TypeScript type definitions
-    ├── domain.ts        # Domain models
-    ├── api.ts          # API DTOs
-    ├── interfaces.ts   # Repository interfaces
-    └── index.ts        # Type exports
+│   ├── auth.repository.ts    # User API calls
+│   ├── clinic.repository.ts  # Clinic API calls
+│   ├── adoption.repository.ts # Adoption API calls
+│   └── base.repository.ts    # Shared repository utilities
+├── lib/                  # Core utilities
+│   ├── api-config.ts     # API endpoints configuration
+│   ├── http-client.ts    # Axios HTTP client setup
+│   └── providers.tsx     # React Query & context providers
+├── types/                # TypeScript definitions
+│   ├── api.ts           # API request/response types
+│   ├── domain.ts        # Business domain types
+│   └── interfaces.ts    # Service contracts
+└── hooks/               # Custom React hooks
+    └── use-auth.ts      # Authentication hook
 ```
 
-## 🎯 Core Features
+## 🔌 API Integration
 
-### 🏠 Pet Adoption
-- **Listings**: Comprehensive pet profiles with photos and details
-- **Applications**: Structured adoption application process
-- **Matching**: Smart matching based on lifestyle and preferences
-- **Tracking**: Application status tracking and communication
+### Endpoint Configuration
 
-### 🛒 Pet Store
-- **Products**: Food, toys, accessories, and health products
-- **Categories**: Organized by pet type and product category
-- **Reviews**: Customer reviews and ratings
-- **Orders**: Complete order management and tracking
+The application integrates with three main API modules:
 
-## 🏗️ Architecture Deep Dive
+#### 👥 User Management (`/api/v1/user/`)
+```typescript
+// Available endpoints
+POST   /user/signup           # User registration
+POST   /user/login            # User authentication  
+GET    /user/                 # Get all users
+POST   /user/update/{userId}  # Update user profile
+DELETE /user/delete/{userId}  # Delete user account
+PUT    /user/reset-password/{userId} # Reset password
+```
 
-### 🎨 UI Layer
+#### 🏥 Clinic Management (`/api/v1/clinic/`)
+```typescript
+// Available endpoints
+POST /clinic/create-clinic              # Register new clinic
+GET  /clinic/get-clinics               # List all clinics
+GET  /clinic/get-clinic-by-id/{id}     # Get clinic details
+PUT  /clinic/update-clinic/{id}        # Update clinic info
+POST /clinic/approval/{id}             # Request clinic approval
+```
 
-**Location**: `src/components/`, `src/app/`
+#### 🐕 Pet Adoption (`/api/v1/adoption/`)
+```typescript
+// Available endpoints
+GET    /adoption/get-adoptions         # List all pets
+GET    /adoption/get-adoption/{id}     # Get pet details
+POST   /adoption/create-adoption       # Add new pet
+PUT    /adoption/update-adoption/{id}  # Update pet info
+DELETE /adoption/delete-adoption/{id}  # Remove pet listing
+```
 
-**Responsibilities**:
-- Presentation logic only
-- User interaction handling
-- Component composition
-- Styling and layout
+### API Response Format
 
-**Key Files**:
-- `components/ui/`: Reusable UI components (Button, Input, etc.)
-- `components/features/`: Feature-specific components
-- `app/`: Next.js pages and layouts
+All endpoints return a consistent response structure:
 
-**Example Usage**:
-```tsx
-// Clean component that uses hooks for business logic
+```typescript
+interface ApiResponse<T> {
+  status: "success" | "error";
+  statusCode: number;
+  message: string;
+  data?: T;
+}
+
+// Example successful response
+{
+  "status": "success",
+  "statusCode": 200,
+  "message": "User authenticated successfully",
+  "data": {
+    "user_id": 1,
+    "name": "John Doe",
+    "email": "john@example.com",
+    "role": "user"
+  }
+}
+```
+
+## 🔐 Authentication System
+
+### JWT Token-Based Authentication
+
+```typescript
+// Login example
 import { useAuth } from '@/hooks/use-auth';
-import { Button } from '@/components/ui/button';
 
-export function UserProfile() {
-  const { user, logout } = useAuth();
+function LoginPage() {
+  const { login, user, isLoading, error } = useAuth();
   
-  return (
-    <div>
-      <h1>Welcome, {user?.firstName}!</h1>
-      <Button onClick={logout}>Logout</Button>
-    </div>
-  );
-}
-```
-
-### 🔄 Service Layer
-
-**Location**: `src/services/`, `src/hooks/`
-
-**Responsibilities**:
-- Business logic implementation
-- State management (Zustand)
-- Data transformation
-- Validation rules
-- Coordination between UI and repositories
-
-**Key Files**:
-- `services/auth.service.ts`: Authentication business logic
-- `hooks/use-auth.ts`: React hook for auth state
-
-**Example Usage**:
-```tsx
-// Service handles business logic and state management
-export const useAuthStore = create<AuthState>()({
-  login: async (credentials) => {
-    // Validation
-    const errors = await authService.validateLoginForm(credentials);
-    if (errors.length > 0) throw new Error(errors.join(', '));
-    
-    // Repository call
-    const response = await authRepo.login(credentials);
-    
-    // State update
-    set({ user: response.data.user, isAuthenticated: true });
-  }
-});
-```
-
-### 🗄️ Repository Layer
-
-**Location**: `src/repositories/`
-
-**Responsibilities**:
-- Data access abstraction
-- HTTP client management
-- API communication
-- Error handling and retries
-- Caching (via React Query)
-
-**Key Files**:
-- `repositories/base.repository.ts`: Base CRUD operations
-- `repositories/auth.repository.ts`: Authentication API calls
-- `lib/http-client.ts`: HTTP client with interceptors
-
-**Example Usage**:
-```tsx
-// Repository handles all API communication
-export class AuthRepository implements IAuthRepository {
-  async login(credentials: LoginRequest): Promise<ApiResponse<LoginResponse>> {
-    const response = await this.httpClient.post(
-      API_ENDPOINTS.AUTH.LOGIN,
-      credentials
-    );
-    
-    // Handle token storage
-    if (response.success) {
-      this.storeTokens(response.data.accessToken, response.data.refreshToken);
+  const handleLogin = async (credentials: LoginCredentials) => {
+    try {
+      await login(credentials);
+      // User is automatically redirected after successful login
+    } catch (error) {
+      // Error handling is managed by the hook
     }
-    
-    return response;
-  }
+  };
 }
 ```
 
-### 📝 Types Layer
+### Authentication Features
 
-**Location**: `src/types/`
+- ✅ JWT token storage and management
+- ✅ Automatic token restoration on page reload
+- ✅ Protected API calls with automatic token inclusion
+- ✅ User session persistence
+- ✅ Secure logout with token cleanup
 
-**Responsibilities**:
-- Type safety across all layers
-- Domain model definitions
-- API contract definitions
-- Interface contracts for repositories
+## 📊 State Management
 
-**Key Files**:
-- `types/domain.ts`: Business domain models (User, Pet, Vet, etc.)
-- `types/api.ts`: API request/response DTOs
-- `types/interfaces.ts`: Repository interfaces following SOLID principles
+### Zustand Stores
 
-**Example Domain Model**:
-```tsx
-// Strong typing for business entities
-export interface Pet extends BaseEntity {
-  name: string;
-  species: PetSpecies;
-  breed: string;
-  age: number;
-  weight: number;
-  ownerId: string;
-  medicalHistory: MedicalRecord[];
-  isForAdoption: boolean;
-}
+Each feature module has its own Zustand store for optimal performance:
 
-export enum PetSpecies {
-  DOG = 'DOG',
-  CAT = 'CAT',
-  BIRD = 'BIRD',
-  // ...
-}
+#### Auth Store
+```typescript
+import { useAuthStore } from '@/services/auth.service';
+
+const { 
+  user,           // Current user data
+  isAuthenticated, // Authentication status
+  login,          // Login function
+  logout,         // Logout function
+  updateProfile   // Profile update function
+} = useAuthStore();
 ```
 
-## 🔧 Configuration
+#### Clinic Store
+```typescript
+import { useClinicStore } from '@/services/clinic.service';
 
-### Environment Variables
+const {
+  clinics,        // Clinic listings
+  selectedClinic, // Currently selected clinic
+  isLoading,      // Loading state
+  error,          // Error state
+  getAllClinics,  // Fetch all clinics
+  createClinic,   // Create new clinic
+  updateClinic    // Update existing clinic
+} = useClinicStore();
+```
 
-Create a `.env.local` file:
+#### Adoption Store
+```typescript
+import { useAdoptionStore } from '@/services/adoption.service';
+
+const {
+  adoptions,      // Pet listings
+  selectedPet,    // Currently selected pet
+  isLoading,      // Loading state
+  getAllAdoptions, // Fetch all pets
+  createAdoption, // Add new pet
+  updateAdoption  // Update pet info
+} = useAdoptionStore();
+```
+
+## 🛠️ Development Setup
+
+### Prerequisites
+
+- **Node.js** 18.0.0 or higher
+- **npm** 9.0.0 or higher (or yarn/pnpm)
+
+### Installation
 
 ```bash
+# 1. Clone the repository
+git clone <repository-url>
+cd spogpaws_client
+
+# 2. Install dependencies
+npm install
+
+# 3. Set up environment variables
+cp .env.example .env.local
+```
+
+### Environment Configuration
+
+Create `.env.local` file:
+
+```env
 # API Configuration
-NEXT_PUBLIC_API_BASE_URL=http://localhost:8080/api/v1
+NEXT_PUBLIC_API_BASE_URL=http://your-server-ip/api/v1
 NEXT_PUBLIC_API_TIMEOUT=30000
-NEXT_PUBLIC_API_RETRY_ATTEMPTS=3
-NEXT_PUBLIC_API_RETRY_DELAY=1000
 
-# File Upload
-NEXT_PUBLIC_UPLOAD_MAX_SIZE=10485760  # 10MB
-NEXT_PUBLIC_SUPPORTED_FILE_TYPES=image/jpeg,image/png,image/gif,application/pdf
+# Optional: Development settings
+NODE_ENV=development
 ```
 
-### API Endpoints
+### Available Scripts
 
-The application is configured to work with a Spring Boot backend. Update the `API_BASE_URL` to point to your backend server.
-
-**Expected Endpoints**:
-- `POST /auth/login` - User login
-- `POST /auth/register` - User registration
-- `GET /auth/me` - Get current user
-- `POST /auth/refresh` - Refresh token
-- `GET /vets` - Get veterinarians
-- `GET /pets` - Get pets
-- `GET /products` - Get products
-- And more... (see `src/lib/api-config.ts` for complete list)
-
-## 🛠️ Development Guide
-
-### Adding a New Feature
-
-1. **Define Types** (Types Layer):
-```tsx
-// src/types/domain.ts
-export interface Appointment extends BaseEntity {
-  vetId: string;
-  petOwnerId: string;
-  petId: string;
-  scheduledDate: Date;
-  status: AppointmentStatus;
-}
+```bash
+# Development
+npm run dev          # Start development server
+npm run build        # Build for production
+npm run start        # Start production server
+npm run lint         # Run ESLint
+npm run type-check   # TypeScript type checking
 ```
 
-2. **Create Repository** (Repository Layer):
-```tsx
-// src/repositories/appointment.repository.ts
-export class AppointmentRepository extends BaseRepository<...> {
-  async findByVet(vetId: string): Promise<ApiResponse<Appointment[]>> {
-    return this.get(`${this.baseEndpoint}/vet/${vetId}`);
-  }
-}
-```
+## 💻 Usage Examples
 
-3. **Create Service** (Service Layer):
-```tsx
-// src/services/appointment.service.ts
-export const useAppointmentStore = create<AppointmentState>()({
-  appointments: [],
-  loading: false,
-  
-  fetchByVet: async (vetId: string) => {
-    set({ loading: true });
-    const repo = repositoryFactory.getAppointmentRepository();
-    const result = await repo.findByVet(vetId);
-    set({ appointments: result.data, loading: false });
-  }
-});
-```
+### Complete Authentication Flow
 
-4. **Create Hook** (Service Layer):
-```tsx
-// src/hooks/use-appointments.ts
-export const useAppointments = () => {
-  const { appointments, loading, fetchByVet } = useAppointmentStore();
-  
-  return {
-    appointments,
-    loading,
-    fetchByVet,
-    // ... other computed values and actions
-  };
-};
-```
+```typescript
+// pages/login.tsx
+import { LoginForm } from '@/components/features/auth/login-form';
 
-5. **Create Components** (UI Layer):
-```tsx
-// src/components/features/appointments/appointment-list.tsx
-export function AppointmentList({ vetId }: { vetId: string }) {
-  const { appointments, loading, fetchByVet } = useAppointments();
-  
-  useEffect(() => {
-    fetchByVet(vetId);
-  }, [vetId]);
-  
-  if (loading) return <LoadingSpinner />;
-  
+export default function LoginPage() {
   return (
-    <div>
-      {appointments.map(appointment => (
-        <AppointmentCard key={appointment.id} appointment={appointment} />
-      ))}
+    <div className="min-h-screen flex items-center justify-center">
+      <LoginForm onSuccess={() => router.push('/dashboard')} />
     </div>
   );
 }
 ```
 
-### Testing Strategy
+### Clinic Management
 
-1. **Unit Tests**: Test individual functions and components
-2. **Integration Tests**: Test layer interactions
-3. **E2E Tests**: Test complete user flows
+```typescript
+// pages/clinics.tsx
+import { ClinicList } from '@/components/features/clinic/clinic-list';
 
-```bash
-# Run tests
-npm run test
-
-# Run tests with coverage
-npm run test:coverage
-
-# Run E2E tests
-npm run test:e2e
+export default function ClinicsPage() {
+  return (
+    <div className="container mx-auto py-8">
+      <h1 className="text-3xl font-bold mb-8">Veterinary Clinics</h1>
+      <ClinicList />
+    </div>
+  );
+}
 ```
 
-### Code Quality
+### Pet Adoption
 
-```bash
-# Linting
-npm run lint
+```typescript
+// pages/adoptions.tsx
+import { AdoptionList } from '@/components/features/adoption/adoption-list';
 
-# Type checking
-npm run type-check
-
-# Format code
-npm run format
+export default function AdoptionsPage() {
+  return (
+    <div className="container mx-auto py-8">
+      <h1 className="text-3xl font-bold mb-8">Pet Adoption</h1>
+      <AdoptionList />
+    </div>
+  );
+}
 ```
 
-## 🌐 API Integration
+## 🎨 UI Components
 
-### Connecting to Spring Boot Backend
+### Pre-built Components
 
-1. **Update environment variables**:
+#### Form Components
+- **Button** - Styled button with loading states and variants
+- **Input** - Form input with validation support
+
+#### Feature Components
+- **LoginForm** - Complete authentication form with validation
+- **ClinicList** - Clinic listings with CRUD operations
+- **AdoptionList** - Pet adoption listings with filtering
+
+### Styling
+
+- **TailwindCSS** for utility-first styling
+- **Responsive Design** with mobile-first approach
+- **Consistent Design System** across all components
+
+## 📱 Features
+
+### ✅ Implemented Features
+
+- 🔐 **User Authentication** - Login, signup, profile management
+- 🏥 **Clinic Management** - Create, view, edit veterinary clinics
+- 🐕 **Pet Adoption** - Manage pet adoption listings
+- 📱 **Responsive Design** - Mobile-friendly interface
+- 🛡️ **Type Safety** - Full TypeScript coverage
+- ⚡ **Performance** - Optimized with Next.js 14
+- 🎯 **State Management** - Efficient Zustand stores
+- 🔄 **Error Handling** - Comprehensive error management
+- 🎨 **Modern UI** - Clean, professional design
+
+### 🚧 Planned Enhancements
+
+- 📊 **Dashboard Analytics** - Clinic and adoption statistics
+- 📧 **Email Notifications** - Automated communication
+- 🔍 **Advanced Search** - Filter pets by criteria
+- 📋 **Application Management** - Adoption application tracking
+- 💬 **Messaging System** - Communication between users
+
+## 🧪 Testing
+
 ```bash
-NEXT_PUBLIC_API_BASE_URL=https://your-api-domain.com/api/v1
+# Run tests (when implemented)
+npm test            # Unit tests
+npm run test:e2e    # End-to-end tests
+npm run test:watch  # Watch mode
 ```
-
-2. **Verify API endpoints match** the ones defined in `src/lib/api-config.ts`
-
-3. **Test connection**:
-```bash
-# The app will show connection status on the dashboard
-npm run dev
-```
-
-### Authentication Flow
-
-The app handles JWT tokens automatically:
-
-1. **Login**: Stores access & refresh tokens
-2. **API Calls**: Automatically adds Authorization header
-3. **Token Refresh**: Automatic refresh when tokens expire
-4. **Logout**: Clears all stored data
-
-### Error Handling
-
-The HTTP client includes comprehensive error handling:
-
-- **Network errors**: Automatic retries
-- **401 Unauthorized**: Automatic token refresh
-- **400-499**: Client error handling
-- **500+**: Server error handling with retries
-
-## 🔐 Security Features
-
-- **JWT Authentication**: Secure token-based auth
-- **Automatic Token Refresh**: Seamless session management
-- **Role-Based Access**: Different permissions for Vets, Pet Owners, etc.
-- **Input Validation**: Client-side and server-side validation
-- **Error Boundaries**: Graceful error handling
-- **XSS Protection**: Sanitized inputs and outputs
-
-## 📱 Responsive Design
-
-Built with mobile-first approach using Tailwind CSS:
-
-- **Mobile**: Optimized for phone screens
-- **Tablet**: Medium screen adaptations
-- **Desktop**: Full desktop experience
-- **Accessibility**: WCAG 2.1 compliant
 
 ## 🚀 Deployment
 
-### Production Build
+### Vercel (Recommended)
 
 ```bash
-# Build for production
+# Deploy to Vercel
+npm i -g vercel
+vercel
+
+# Set environment variables in Vercel dashboard
+```
+
+### Manual Deployment
+
+```bash
+# Build application
 npm run build
 
 # Start production server
 npm start
 ```
 
-### Environment Setup
+## 📚 Additional Resources
 
-For production, ensure these environment variables are set:
+### Project Structure Explanation
 
-```bash
-NEXT_PUBLIC_API_BASE_URL=https://api.spogpaws.com/v1
-NODE_ENV=production
-```
+- **Repositories** - Handle all API communication with proper error handling
+- **Services** - Manage business logic and state with Zustand
+- **Components** - Reusable UI components with TypeScript props
+- **Hooks** - Custom React hooks for common functionality
+- **Types** - Comprehensive TypeScript definitions
 
-### Deployment Platforms
+### Development Guidelines
 
-This app can be deployed to:
-
-- **Vercel** (recommended for Next.js)
-- **Netlify**
-- **AWS Amplify**
-- **Docker** containers
-- **Traditional hosting** with Node.js support
+1. **Follow TypeScript** - Use proper types for all functions and components
+2. **Error Handling** - Always handle loading and error states
+3. **Validation** - Validate user inputs on both client and server side
+4. **Responsive Design** - Ensure mobile compatibility
+5. **Performance** - Optimize API calls and component renders
 
 ## 🤝 Contributing
 
 1. **Fork the repository**
-2. **Create a feature branch**: `git checkout -b feature/amazing-feature`
-3. **Follow the architecture patterns** described in this README
-4. **Write tests** for new functionality
-5. **Commit changes**: `git commit -m 'Add amazing feature'`
-6. **Push to branch**: `git push origin feature/amazing-feature`
-7. **Open a Pull Request**
+2. **Create feature branch** (`git checkout -b feature/amazing-feature`)
+3. **Follow code standards** - Use existing patterns and TypeScript
+4. **Add proper error handling** and loading states
+5. **Test thoroughly** with actual API endpoints
+6. **Commit changes** (`git commit -m 'Add amazing feature'`)
+7. **Push to branch** (`git push origin feature/amazing-feature`)
+8. **Open Pull Request**
 
-### Development Standards
+## 📝 Notes
 
-- **Follow SOLID principles**
-- **Maintain layer separation**
-- **Write TypeScript for everything**
-- **Add tests for new features**
-- **Update documentation**
-- **Use conventional commits**
+- **Simplified Architecture** - Streamlined from complex veterinary platform to focused API integration
+- **API Alignment** - Structure exactly matches documented Spogpaws API
+- **Modern Stack** - Built with Next.js 14, TypeScript, TailwindCSS, and Zustand
+- **Production Ready** - Includes error handling, validation, and responsive design
 
-## 📖 Additional Resources
+## 📞 Support
 
-- **Next.js Documentation**: https://nextjs.org/docs
-- **Zustand State Management**: https://github.com/pmndrs/zustand
-- **React Query**: https://tanstack.com/query
-- **Tailwind CSS**: https://tailwindcss.com/docs
-- **TypeScript**: https://www.typescriptlang.org/docs
-
-## 🐛 Troubleshooting
-
-### Common Issues
-
-1. **API Connection Failed**:
-   - Check `NEXT_PUBLIC_API_BASE_URL` in `.env.local`
-   - Verify backend server is running
-   - Check network connectivity
-
-2. **Authentication Not Working**:
-   - Clear browser localStorage
-   - Check token expiration
-   - Verify API endpoints
-
-3. **Build Errors**:
-   - Run `npm run type-check` for TypeScript errors
-   - Check for missing dependencies
-   - Verify environment variables
-
-### Getting Help
-
-- **Issues**: Open a GitHub issue
-- **Discussions**: Use GitHub Discussions
-- **Documentation**: Check this README
-- **Code Examples**: See the demo implementation
+For issues and questions:
+- Create an issue in the repository
+- Review existing documentation
+- Check API documentation alignment
 
 ---
 
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
-
----
-
-**Built with ❤️ for the pet care community**
-
-The architecture is designed to be **scalable**, **maintainable**, and **enterprise-ready**. Each layer has a clear responsibility, making the codebase easy to understand, test, and extend.
-
-Happy coding! 🐾
+Built with ❤️ using Next.js 14, TypeScript, and TailwindCSS

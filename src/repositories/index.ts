@@ -1,67 +1,68 @@
-// Repository Index - Centralized repository exports and factory
+// Repository Factory and Exports
+// Updated for Spogpaws API structure
 import { HttpClient } from '@/lib/http-client';
 import { getEnvironmentConfig } from '@/lib/api-config';
-import { AuthRepository } from './auth.repository';
-import { VetRepository } from './vet.repository';
-import {
-  IAuthRepository,
-  IVetRepository,
-  IHttpClient,
+import { 
+  IHttpClient, 
+  IAuthRepository, 
+  IClinicRepository,
+  IAdoptionRepository
 } from '@/types';
 
-// Initialize HTTP client with environment config
-const createHttpClient = (): IHttpClient => {
-  const config = getEnvironmentConfig();
-  return new HttpClient(config);
-};
+import { AuthRepository } from './auth.repository';
+import { ClinicRepository } from './clinic.repository';
+import { AdoptionRepository } from './adoption.repository';
 
-// Repository factory class following Dependency Injection pattern
-export class RepositoryFactory {
-  private static instance: RepositoryFactory;
+// Repository Factory Class
+class RepositoryFactory {
   private httpClient: IHttpClient;
+  private authRepository: IAuthRepository | null = null;
+  private clinicRepository: IClinicRepository | null = null;
+  private adoptionRepository: IAdoptionRepository | null = null;
 
-  private constructor() {
-    this.httpClient = createHttpClient();
+  constructor() {
+    const config = getEnvironmentConfig();
+    this.httpClient = new HttpClient(config);
   }
 
-  public static getInstance(): RepositoryFactory {
-    if (!RepositoryFactory.instance) {
-      RepositoryFactory.instance = new RepositoryFactory();
+  getAuthRepository(): IAuthRepository {
+    if (!this.authRepository) {
+      this.authRepository = new AuthRepository(this.httpClient);
     }
-    return RepositoryFactory.instance;
+    return this.authRepository;
   }
 
-  // Repository getters
-  public getAuthRepository(): IAuthRepository {
-    return new AuthRepository(this.httpClient);
+  getClinicRepository(): IClinicRepository {
+    if (!this.clinicRepository) {
+      this.clinicRepository = new ClinicRepository(this.httpClient);
+    }
+    return this.clinicRepository;
   }
 
-  public getVetRepository(): IVetRepository {
-    return new VetRepository(this.httpClient);
+  getAdoptionRepository(): IAdoptionRepository {
+    if (!this.adoptionRepository) {
+      this.adoptionRepository = new AdoptionRepository(this.httpClient);
+    }
+    return this.adoptionRepository;
   }
 
-  // Method to get HTTP client for custom repositories
-  public getHttpClient(): IHttpClient {
+  getHttpClient(): IHttpClient {
     return this.httpClient;
   }
 
-  // Method to reset HTTP client (useful for testing)
-  public resetHttpClient(): void {
-    this.httpClient = createHttpClient();
+  // Reset all repositories (useful for testing or auth changes)
+  reset(): void {
+    this.authRepository = null;
+    this.clinicRepository = null;
+    this.adoptionRepository = null;
   }
 }
 
-// Convenience exports for direct usage
-export const repositoryFactory = RepositoryFactory.getInstance();
+// Singleton instance
+export const repositoryFactory = new RepositoryFactory();
 
-// Individual repository exports
+// Individual exports for direct import
 export { AuthRepository } from './auth.repository';
-export { VetRepository } from './vet.repository';
-export { BaseRepository } from './base.repository';
-
-// Type exports
-export type {
-  IAuthRepository,
-  IVetRepository,
-  IHttpClient,
-} from '@/types'; 
+export { ClinicRepository } from './clinic.repository';
+export { AdoptionRepository } from './adoption.repository';
+export { BaseRepository } from './base.repository'; 
