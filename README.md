@@ -20,7 +20,6 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Visit `http://localhost:3000` to see the application.
 
 ## 📋 Project Overview
 
