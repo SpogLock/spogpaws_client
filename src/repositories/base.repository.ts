@@ -1,6 +1,6 @@
 // Base Repository Implementation
-// Provides common CRUD operations for all repositories
-import { IBaseRepository, IHttpClient, ApiResponse, PaginatedResponse } from '@/types';
+// Updated for Spogpaws API structure
+import { IBaseRepository, IHttpClient, ApiResponse } from '@/types';
 
 export abstract class BaseRepository<T, TCreate, TUpdate> implements IBaseRepository<T, TCreate, TUpdate> {
   protected httpClient: IHttpClient;
@@ -15,10 +15,8 @@ export abstract class BaseRepository<T, TCreate, TUpdate> implements IBaseReposi
     return this.httpClient.get<ApiResponse<T>>(`${this.baseEndpoint}/${id}`);
   }
 
-  async findAll(page: number = 0, size: number = 20): Promise<ApiResponse<PaginatedResponse<T>>> {
-    return this.httpClient.get<ApiResponse<PaginatedResponse<T>>>(
-      `${this.baseEndpoint}?page=${page}&size=${size}`
-    );
+  async findAll(): Promise<ApiResponse<T[]>> {
+    return this.httpClient.get<ApiResponse<T[]>>(this.baseEndpoint);
   }
 
   async create(data: TCreate): Promise<ApiResponse<T>> {

@@ -1,6 +1,7 @@
-// HTTP Client implementation with authentication and error handling
+// HTTP Client implementation for Spogpaws API
+// Updated to match documented API response structure
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import { IHttpClient, IApiConfig, ApiResponse, ApiError } from '@/types';
+import { IHttpClient, IApiConfig, ApiResponse } from '@/types';
 
 export class HttpClient implements IHttpClient {
   private client: AxiosInstance;
@@ -24,14 +25,6 @@ export class HttpClient implements IHttpClient {
     // Request interceptor
     this.client.interceptors.request.use(
       (config) => {
-        // Add timestamp for cache busting if needed
-        if (config.method === 'get') {
-          config.params = {
-            ...config.params,
-            _t: Date.now(),
-          };
-        }
-
         // Log requests in development
         if (process.env.NODE_ENV === 'development') {
           console.log(`📤 ${config.method?.toUpperCase()} ${config.url}`, {
@@ -64,25 +57,11 @@ export class HttpClient implements IHttpClient {
       async (error) => {
         const originalRequest = error.config;
 
-        // Handle token expiration
+        // Handle token expiration (401 unauthorized)
         if (error.response?.status === 401 && !originalRequest._retry) {
           originalRequest._retry = true;
-          
-          try {
-            const refreshToken = this.getRefreshToken();
-            if (refreshToken) {
-              const newToken = await this.refreshAccessToken(refreshToken);
-              if (newToken) {
-                this.setAuthToken(newToken);
-                originalRequest.headers.Authorization = `Bearer ${newToken}`;
-                return this.client(originalRequest);
-              }
-            }
-          } catch (refreshError) {
-            // Redirect to login or handle refresh failure
-            this.handleAuthFailure();
-            return Promise.reject(refreshError);
-          }
+          this.handleAuthFailure();
+          return Promise.reject(error);
         }
 
         // Retry logic for network errors
@@ -92,6 +71,7 @@ export class HttpClient implements IHttpClient {
           return this.client(originalRequest);
         }
 
+        // Transform error to match API response format
         const apiError = this.transformError(error);
         console.error('API Error:', apiError);
         return Promise.reject(apiError);
@@ -121,57 +101,46 @@ export class HttpClient implements IHttpClient {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
-  private transformError(error: any): ApiError {
+  private transformError(error: any): ApiResponse {
     if (error.response?.data) {
+      // If response has data in Spogpaws format, return it
+      if (error.response.data.status && error.response.data.statusCode) {
+        return error.response.data;
+      }
+      
+      // Transform to Spogpaws format
       return {
-        message: error.response.data.message || 'An error occurred',
-        code: error.response.data.code || error.response.status.toString(),
-        field: error.response.data.field,
+        status: 'error',
+        statusCode: error.response.status,
+        message: error.response.data.message || 'An error occurred'
       };
     }
 
     if (error.code === 'NETWORK_ERROR') {
       return {
-        message: 'Network error - please check your internet connection',
-        code: 'NETWORK_ERROR',
+        status: 'error',
+        statusCode: 0,
+        message: 'Network error - please check your internet connection'
       };
     }
 
     if (error.code === 'TIMEOUT') {
       return {
-        message: 'Request timeout - please try again',
-        code: 'TIMEOUT',
+        status: 'error',
+        statusCode: 0,
+        message: 'Request timeout - please try again'
       };
     }
 
     return {
-      message: error.message || 'An unexpected error occurred',
-      code: 'UNKNOWN_ERROR',
+      status: 'error',
+      statusCode: 0,
+      message: error.message || 'An unexpected error occurred'
     };
-  }
-
-  private getRefreshToken(): string | null {
-    return localStorage.getItem('refreshToken');
-  }
-
-  private async refreshAccessToken(refreshToken: string): Promise<string | null> {
-    try {
-      const response = await axios.post(`${this.config.baseUrl}/auth/refresh`, {
-        refreshToken,
-      });
-      
-      const newToken = response.data.data.accessToken;
-      localStorage.setItem('accessToken', newToken);
-      return newToken;
-    } catch (error) {
-      console.error('Token refresh failed:', error);
-      return null;
-    }
   }
 
   private handleAuthFailure(): void {
     localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
     localStorage.removeItem('user');
     
     // Redirect to login page
@@ -223,23 +192,5 @@ export class HttpClient implements IHttpClient {
 
   setTimeout(timeout: number): void {
     this.client.defaults.timeout = timeout;
-  }
-
-  addRequestInterceptor(
-    onFulfilled?: (config: any) => any,
-    onRejected?: (error: any) => any
-  ): number {
-    return this.client.interceptors.request.use(onFulfilled, onRejected);
-  }
-
-  addResponseInterceptor(
-    onFulfilled?: (response: AxiosResponse) => AxiosResponse,
-    onRejected?: (error: any) => any
-  ): number {
-    return this.client.interceptors.response.use(onFulfilled, onRejected);
-  }
-
-  removeInterceptor(type: 'request' | 'response', id: number): void {
-    this.client.interceptors[type].eject(id);
   }
 } 
