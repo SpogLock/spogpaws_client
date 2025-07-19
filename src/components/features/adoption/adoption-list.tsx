@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { useAdoptionStore } from '@/services/adoption.service';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/outlined-button';
 import { AdoptionDto } from '@/types';
 
 interface AdoptionCardProps {

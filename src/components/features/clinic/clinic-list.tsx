@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { useClinicStore } from '@/services/clinic.service';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/outlined-button';
 import { ClinicDto } from '@/types';
 
 interface ClinicCardProps {
