@@ -30,7 +30,7 @@ export default function OutlinedButton({
       gap: text && resolvedIcon ? '8px' : '0'
     }}>
       {resolvedIcon && <span style={{ display: 'flex', alignItems: 'center' }}>{resolvedIcon}</span>}
-      {text && <Typography variant="body1">{text}</Typography>}
+      {text && <Typography variant="body2">{text}</Typography>}
     </div>
   );
 

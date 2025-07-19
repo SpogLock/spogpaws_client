@@ -34,7 +34,7 @@ export default function Navbar() {
               <li className="nav-item dropdown px-4">
                 <a className="nav-link dropdown-toggle text-dark fw-medium" href="#" id="vetsDropdown" role="button"
                   data-bs-toggle="dropdown">
-                  For Vets
+                  For Veterinarians
                 </a>
                 <ul className="dropdown-menu">
                   <li><a className="dropdown-item" href="/vets/register">Become a vet</a></li>
