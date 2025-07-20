@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Button } from '@/components/ui/outlined-button';
+import Button from '@/components/ui/outlined-button';
 import { Input } from '@/components/ui/input';
 import { useAuthStore, authService } from '@/services/auth.service';
 import { LoginRequest } from '@/types';

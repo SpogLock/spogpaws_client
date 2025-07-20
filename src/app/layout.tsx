@@ -1,5 +1,6 @@
 import Navbar from '@/components/ui/navbar';
 import { AppProviders } from '@/lib/providers';
+import './global.css';
 
 export const metadata = {
   title: 'SpogPaws - Connecting Vets with Pet Owners',

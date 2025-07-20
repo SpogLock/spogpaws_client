@@ -5,28 +5,34 @@ import { ICON_MAP, IconName } from './ui-utility';
 
 interface FilledButtonProps extends Omit<ButtonProps, 'variant'> {
   text?: string;
-  icon?: IconName | React.ReactNode; // Can be either a string name or custom icon
+  icon?: IconName | React.ReactNode;
+  customColor?: string;
+  borderColor?: string;
+  textColor?: string;
   children?: React.ReactNode;
 }
 
-export default function FilledButton({ 
-  text, 
-  icon, 
-  children, 
+export default function FilledButton({
+  text,
+  icon,
+  children,
   onClick,
-  ...otherProps 
-}: FilledButtonProps) {
+  customColor,
+  borderColor,
+  textColor,
+  ...otherProps
+}: FilledButtonProps) { 
   // Resolve icon - if it's a string, get from map, otherwise use as-is
-  const resolvedIcon = typeof icon === 'string' && icon in ICON_MAP ? 
-    React.createElement(ICON_MAP[icon as IconName]) : 
+  const resolvedIcon = typeof icon === 'string' && icon in ICON_MAP ?
+    React.createElement(ICON_MAP[icon as IconName]) :
     icon;
 
   // If children is provided, use it (backward compatibility)
   // Otherwise, use text and icon props
   const content = children || (
-    <div style={{ 
-      display: 'flex', 
-      alignItems: 'center', 
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
       gap: text && resolvedIcon ? '8px' : '0'
     }}>
       {resolvedIcon && <span style={{ display: 'flex', alignItems: 'center' }}>{resolvedIcon}</span>}
@@ -35,7 +41,16 @@ export default function FilledButton({
   );
 
   return (
-    <Button variant="contained" onClick={onClick} {...otherProps}>
+    <Button variant="contained" onClick={onClick} sx={{
+      backgroundColor: customColor,
+      borderColor: borderColor,
+      color: textColor,
+        '&:hover': {
+        backgroundColor: customColor,
+        borderColor: borderColor,
+        color: textColor,
+      },
+    }} {...otherProps}>
       {content}
     </Button>
   );

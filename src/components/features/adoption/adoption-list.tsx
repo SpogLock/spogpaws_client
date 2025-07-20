@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { useAdoptionStore } from '@/services/adoption.service';
-import { Button } from '@/components/ui/outlined-button';
+import Button from '@/components/ui/outlined-button';
 import { AdoptionDto } from '@/types';
 
 interface AdoptionCardProps {
@@ -33,7 +33,7 @@ function AdoptionCard({ adoption, onViewDetails }: AdoptionCardProps) {
       </div>
       <div className="mt-4">
         <Button 
-          variant="primary"
+          customColor='#25EBC3'
           onClick={() => onViewDetails(adoption)}
         >
           Learn More

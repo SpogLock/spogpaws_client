@@ -58,10 +58,10 @@ export default function Navbar() {
 
               {/* Action Buttons */}
               <li className="nav-item mx-2">
-                <FilledButton text="OWN A PET" className="" />
+                <FilledButton text="OWN A PET" className="" customColor='#25EBC3' borderColor='#25EBC3' textColor='#000000'/>
               </li>
               <li className="nav-item mx-2">
-                <OutlinedButton text="I NEED A SPECIALIST" className="" />
+                <OutlinedButton text="I NEED A SPECIALIST" className="" customColor='#000000'/>
               </li>
 
               {/* Border Separator */}

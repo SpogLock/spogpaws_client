@@ -7,6 +7,8 @@ interface OutlinedButtonProps extends Omit<ButtonProps, 'variant'> {
   text?: string;
   icon?: IconName | React.ReactNode; // Can be either a string name or custom icon
   children?: React.ReactNode;
+  customColor?: string;
+  textColor?: string;
 }
 
 export default function OutlinedButton({ 
@@ -14,6 +16,8 @@ export default function OutlinedButton({
   icon, 
   children, 
   onClick,
+  customColor,
+  textColor,
   ...otherProps 
 }: OutlinedButtonProps) {
   // Resolve icon - if it's a string, get from map, otherwise use as-is
@@ -35,7 +39,10 @@ export default function OutlinedButton({
   );
 
   return (
-    <Button variant="outlined" onClick={onClick} {...otherProps}>
+    <Button variant="outlined" onClick={onClick} sx={{
+      borderColor: customColor,
+      color: textColor,
+    }} {...otherProps}>
       {content}
     </Button>
   );
