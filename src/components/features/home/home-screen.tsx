@@ -3,42 +3,10 @@
 import { useEffect, useRef } from 'react';
 import { useAdoptionStore } from '@/services/adoption.service';
 import UI from '@/components/ui/ui_core';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './home-screen.css';
-
-// Register GSAP plugins
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger);
-}
 
 export default function HomeScreen() {
   const mainRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-
-    const ctx = gsap.context(() => {
-      // Create smooth scrolling effect
-      gsap.to(mainRef.current, {
-        ease: "none",
-        scrollTrigger: {
-          trigger: mainRef.current,
-          start: "top top",
-          end: "bottom bottom",
-          scrub: true,
-        }
-      });
-
-      // Refresh ScrollTrigger after component mount
-      ScrollTrigger.refresh();
-    }, mainRef);
-
-    return () => {
-      ctx.revert();
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
-    };
-  }, []);
 
   return (
     <main ref={mainRef}>
@@ -54,7 +22,7 @@ export default function HomeScreen() {
   );
 }
 
-// Hero Section Component with GSAP Animations
+// Hero Section Component
 function HeroSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
@@ -64,106 +32,10 @@ function HeroSection() {
   const imageRef = useRef<HTMLImageElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-
-    const ctx = gsap.context(() => {
-      // Set initial states
-      gsap.set([titleRef.current, subtitleRef.current, buttonRef.current], { 
-        opacity: 0, 
-        y: 100 
-      });
-      gsap.set(cardsRef.current, { opacity: 0, x: -50 });
-      gsap.set(imageRef.current, { opacity: 0, scale: 0.8, rotation: -10 });
-
-      // Hero entrance animation timeline
-      const tl = gsap.timeline({ delay: 0.5 });
-      
-      tl.to(titleRef.current, {
-        opacity: 1,
-        y: 0,
-        duration: 1.2,
-        ease: "power3.out"
-      })
-      .to(subtitleRef.current, {
-        opacity: 1,
-        y: 0,
-        duration: 1,
-        ease: "power3.out"
-      }, "-=0.8")
-      .to(buttonRef.current, {
-        opacity: 1,
-        y: 0,
-        duration: 0.8,
-        ease: "back.out(1.7)"
-      }, "-=0.6")
-      .to(cardsRef.current, {
-        opacity: 1,
-        x: 0,
-        duration: 0.8,
-        ease: "power2.out"
-      }, "-=0.4")
-      .to(imageRef.current, {
-        opacity: 1,
-        scale: 1,
-        rotation: 0,
-        duration: 1.2,
-        ease: "elastic.out(1, 0.5)"
-      }, "-=1");
-
-             // Floating animation for hero image
-       gsap.to(imageRef.current, {
-         y: -20,
-         duration: 2,
-         ease: "power2.inOut",
-         yoyo: true,
-         repeat: -1
-       });
-
-             // Parallax effect for hero section (adjusted to prevent navbar overlap)
-       gsap.to(containerRef.current, {
-         yPercent: -20, // Reduced from -50 to prevent excessive upward movement
-         ease: "none",
-         scrollTrigger: {
-           trigger: sectionRef.current,
-           start: "top bottom",
-           end: "bottom top",
-           scrub: true
-         }
-       });
-
-      // Cards hover animations
-      const cards = cardsRef.current?.querySelectorAll('.adoption-card');
-      cards?.forEach((card) => {
-        const cardElement = card as HTMLElement;
-        cardElement.addEventListener('mouseenter', () => {
-          gsap.to(cardElement, {
-            scale: 1.05,
-            y: -5,
-            duration: 0.3,
-            ease: "power2.out"
-          });
-        });
-        
-        cardElement.addEventListener('mouseleave', () => {
-          gsap.to(cardElement, {
-            scale: 1,
-            y: 0,
-            duration: 0.3,
-            ease: "power2.out"
-          });
-        });
-      });
-
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
-
   return (
-         <section ref={sectionRef} className="hero-section pb-5">
-              <div ref={containerRef} className="container-fluid h-100 d-flex justify-content-center">
-          <div className="row align-items-center">
+    <section ref={sectionRef} className="hero-section pb-5">
+      <div ref={containerRef} className="container-fluid h-100 d-flex justify-content-center">
+        <div className="row align-items-center">
           <div className="col-lg-6 col-md-8">
             <div className="hero-content">
               <h1 ref={titleRef} className="hero-title">
@@ -217,60 +89,10 @@ function HeroSection() {
   );
 }
 
-// Partners Section with Stagger Animation
+// Partners Section
 function PartnersSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const logosRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-
-    const ctx = gsap.context(() => {
-      const logos = logosRef.current?.querySelectorAll('.partner-logo');
-      if (!logos || logos.length === 0) return;
-      
-      gsap.set(logos, { opacity: 0, y: 30 });
-
-      gsap.to(logos, {
-        opacity: 1,
-        y: 0,
-        duration: 0.6,
-        stagger: 0.1,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 80%",
-          end: "bottom 20%",
-          toggleActions: "play none none reverse"
-        }
-      });
-
-      // Hover animations for logos
-      logos?.forEach((logo) => {
-        const logoElement = logo as HTMLElement;
-        logoElement.addEventListener('mouseenter', () => {
-          gsap.to(logoElement, {
-            scale: 1.1,
-            backgroundColor: "#e5e7eb",
-            duration: 0.3,
-            ease: "power2.out"
-          });
-        });
-        
-        logoElement.addEventListener('mouseleave', () => {
-          gsap.to(logoElement, {
-            scale: 1,
-            backgroundColor: "#e9ecef",
-            duration: 0.3,
-            ease: "power2.out"
-          });
-        });
-      });
-
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
 
   return (
     <section ref={sectionRef} className="partners-section py-5">
@@ -291,7 +113,7 @@ function PartnersSection() {
   );
 }
 
-// Pet Care Section with Card Animations
+// Pet Care Section
 function PetCareSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
@@ -304,81 +126,6 @@ function PetCareSection() {
     { name: "VET DR. ALI RAZA", hasCheckmark: true, rating: 5, isTop: false, description: "Vets on our platform are verified professionals that adhere to lawful medical practices." },
     { name: "KURWA CLINIC", hasCheckmark: true, rating: 5, isTop: false, description: "Vets on our platform are verified professionals that adhere to lawful medical practices." }
   ];
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-
-    const ctx = gsap.context(() => {
-      const cards = cardsRef.current?.querySelectorAll('.vet-card');
-      if (!cards || cards.length === 0) return;
-      
-      // Set initial states
-      gsap.set([titleRef.current, subtitleRef.current], { opacity: 0, y: 50 });
-      gsap.set(cards, { opacity: 0, y: 80, rotationX: -15 });
-      gsap.set(buttonRef.current, { opacity: 0, scale: 0.8 });
-
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 70%",
-          end: "bottom 30%",
-          toggleActions: "play none none reverse"
-        }
-      });
-
-      tl.to(titleRef.current, {
-        opacity: 1,
-        y: 0,
-        duration: 0.8,
-        ease: "power3.out"
-      })
-      .to(subtitleRef.current, {
-        opacity: 1,
-        y: 0,
-        duration: 0.6,
-        ease: "power2.out"
-      }, "-=0.4")
-      .to(cards, {
-        opacity: 1,
-        y: 0,
-        rotationX: 0,
-        duration: 0.8,
-        stagger: 0.2,
-        ease: "power3.out"
-      }, "-=0.2")
-      .to(buttonRef.current, {
-        opacity: 1,
-        scale: 1,
-        duration: 0.6,
-        ease: "back.out(1.7)"
-      }, "-=0.4");
-
-      // Card hover animations
-      cards?.forEach((card) => {
-        const cardElement = card as HTMLElement;
-        cardElement.addEventListener('mouseenter', () => {
-          gsap.to(cardElement, {
-            y: -10,
-            scale: 1.02,
-            duration: 0.4,
-            ease: "power2.out"
-          });
-        });
-        
-        cardElement.addEventListener('mouseleave', () => {
-          gsap.to(cardElement, {
-            y: 0,
-            scale: 1,
-            duration: 0.4,
-            ease: "power2.out"
-          });
-        });
-      });
-
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
 
   return (
     <section ref={sectionRef} className="pet-care-section py-5">
@@ -438,72 +185,11 @@ function PetCareSection() {
   );
 }
 
-// Mobile App Section with Phone Animations
+// Mobile App Section
 function MobileAppSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const phonesRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-
-    const ctx = gsap.context(() => {
-      const phones = phonesRef.current?.querySelectorAll('.phone-mockup');
-      if (!phones || phones.length === 0) return;
-      
-      gsap.set(contentRef.current, { opacity: 0, x: -100 });
-      gsap.set(phones, { opacity: 0, y: 100, rotation: 0 });
-
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 70%",
-          end: "bottom 30%",
-          toggleActions: "play none none reverse"
-        }
-      });
-
-      tl.to(contentRef.current, {
-        opacity: 1,
-        x: 0,
-        duration: 1,
-        ease: "power3.out"
-      })
-      .to(phones, {
-        opacity: 1,
-        y: 0,
-        duration: 0.8,
-        stagger: 0.2,
-        ease: "back.out(1.7)"
-      }, "-=0.5");
-
-      // Continuous floating animation for phones
-      phones?.forEach((phone, index) => {
-        gsap.to(phone, {
-          y: index % 2 === 0 ? -15 : -25,
-          duration: 2 + index * 0.5,
-          ease: "power2.inOut",
-          yoyo: true,
-          repeat: -1
-        });
-      });
-
-      // Parallax effect
-      gsap.to(phonesRef.current, {
-        yPercent: -30,
-        ease: "none",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: true
-        }
-      });
-
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
 
   return (
     <section ref={sectionRef} className="mobile-app-section">
@@ -534,78 +220,12 @@ function MobileAppSection() {
   );
 }
 
-// Impact Section with Image Gallery Animation
+// Impact Section
 function ImpactSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const imagesRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-
-    const ctx = gsap.context(() => {
-      const images = imagesRef.current?.querySelectorAll('img');
-      const cards = cardsRef.current?.querySelectorAll('.story-card');
-      if (!images || images.length === 0 || !cards || cards.length === 0) return;
-      
-      gsap.set(contentRef.current, { opacity: 0, x: -80 });
-      gsap.set(images, { opacity: 0, scale: 0.8 });
-      gsap.set(cards, { opacity: 0, y: 50 });
-
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 70%",
-          end: "bottom 30%",
-          toggleActions: "play none none reverse"
-        }
-      });
-
-      tl.to(contentRef.current, {
-        opacity: 1,
-        x: 0,
-        duration: 1,
-        ease: "power3.out"
-      })
-      .to(images, {
-        opacity: 1,
-        scale: 1,
-        duration: 0.8,
-        stagger: 0.15,
-        ease: "power2.out"
-      }, "-=0.5")
-      .to(cards, {
-        opacity: 1,
-        y: 0,
-        duration: 0.6,
-        stagger: 0.2,
-        ease: "power2.out"
-      }, "-=0.3");
-
-      // Image hover effects
-      images?.forEach((img) => {
-        img.addEventListener('mouseenter', () => {
-          gsap.to(img, {
-            scale: 1.05,
-            duration: 0.4,
-            ease: "power2.out"
-          });
-        });
-        
-        img.addEventListener('mouseleave', () => {
-          gsap.to(img, {
-            scale: 1,
-            duration: 0.4,
-            ease: "power2.out"
-          });
-        });
-      });
-
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
 
   return (
     <section ref={sectionRef} className="impact-section py-5">
@@ -660,7 +280,7 @@ function ImpactSection() {
   );
 }
 
-// Statistics Section with Counter Animation
+// Statistics Section
 function StatisticsSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
@@ -672,68 +292,6 @@ function StatisticsSection() {
     { number: "2K+", label: "ANIMALS TREATED" },
     { number: "10K+", label: "ANIMALS SAVED" }
   ];
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-
-    const ctx = gsap.context(() => {
-      const statItems = statsRef.current?.querySelectorAll('.stat-item');
-      const numbers = statsRef.current?.querySelectorAll('.stat-number');
-      if (!statItems || statItems.length === 0 || !numbers || numbers.length === 0) return;
-      
-      gsap.set(headerRef.current, { opacity: 0, y: 50 });
-      gsap.set(statItems, { opacity: 0, y: 80, scale: 0.8 });
-
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 70%",
-          end: "bottom 30%",
-          toggleActions: "play none none reverse"
-        }
-      });
-
-      tl.to(headerRef.current, {
-        opacity: 1,
-        y: 0,
-        duration: 0.8,
-        ease: "power3.out"
-      })
-      .to(statItems, {
-        opacity: 1,
-        y: 0,
-        scale: 1,
-        duration: 0.8,
-        stagger: 0.15,
-        ease: "back.out(1.7)"
-      }, "-=0.3");
-
-      // Counter animation for numbers
-      numbers?.forEach((numberEl, index) => {
-        const finalNumber = parseInt(stats[index].number.replace(/[^0-9]/g, ''));
-        const obj = { value: 0 };
-        
-        gsap.to(obj, {
-          value: finalNumber,
-          duration: 2,
-          ease: "power2.out",
-          delay: 0.5 + index * 0.1,
-          onUpdate: () => {
-            const suffix = stats[index].number.includes('K') ? 'K+' : '+';
-            (numberEl as HTMLElement).textContent = Math.round(obj.value) + suffix;
-          },
-          scrollTrigger: {
-            trigger: numberEl,
-            start: "top 80%",
-            toggleActions: "play none none none"
-          }
-        });
-      });
-
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
 
   return (
     <section ref={sectionRef} className="statistics-section">
@@ -759,7 +317,7 @@ function StatisticsSection() {
   );
 }
 
-// Testimonials Section with Card Carousel Effect
+// Testimonials Section
 function TestimonialsSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
@@ -785,67 +343,6 @@ function TestimonialsSection() {
       avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=60&h=60&fit=crop&crop=face"
     }
   ];
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-
-    const ctx = gsap.context(() => {
-      const cards = cardsRef.current?.querySelectorAll('.testimonial-card');
-      if (!cards || cards.length === 0) return;
-      
-      gsap.set(titleRef.current, { opacity: 0, y: 50 });
-      gsap.set(cards, { opacity: 0, y: 100, rotationY: -15 });
-
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 70%",
-          end: "bottom 30%",
-          toggleActions: "play none none reverse"
-        }
-      });
-
-      tl.to(titleRef.current, {
-        opacity: 1,
-        y: 0,
-        duration: 0.8,
-        ease: "power3.out"
-      })
-      .to(cards, {
-        opacity: 1,
-        y: 0,
-        rotationY: 0,
-        duration: 0.8,
-        stagger: 0.2,
-        ease: "power3.out"
-      }, "-=0.3");
-
-      // Card hover effects
-      cards?.forEach((card) => {
-        const cardElement = card as HTMLElement;
-        cardElement.addEventListener('mouseenter', () => {
-          gsap.to(cardElement, {
-            y: -15,
-            scale: 1.03,
-            duration: 0.4,
-            ease: "power2.out"
-          });
-        });
-        
-        cardElement.addEventListener('mouseleave', () => {
-          gsap.to(cardElement, {
-            y: 0,
-            scale: 1,
-            duration: 0.4,
-            ease: "power2.out"
-          });
-        });
-      });
-
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
 
   return (
     <section ref={sectionRef} className="testimonials-section py-5">
@@ -878,38 +375,10 @@ function TestimonialsSection() {
   );
 }
 
-// Footer with Smooth Entrance
+// Footer
 function Footer() {
   const footerRef = useRef<HTMLElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-
-    const ctx = gsap.context(() => {
-      const sections = contentRef.current?.querySelectorAll('.footer-section-content');
-      if (!sections || sections.length === 0) return;
-      
-      gsap.set(sections, { opacity: 0, y: 50 });
-
-      gsap.to(sections, {
-        opacity: 1,
-        y: 0,
-        duration: 0.8,
-        stagger: 0.2,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: footerRef.current,
-          start: "top 80%",
-          end: "bottom 20%",
-          toggleActions: "play none none reverse"
-        }
-      });
-
-    }, footerRef);
-
-    return () => ctx.revert();
-  }, []);
 
   return (
     <footer ref={footerRef} className="footer-section py-5">
