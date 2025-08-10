@@ -1,10 +1,10 @@
 'use client';
-import HomeScreen from '@/components/features/home/home-screen';
+import HomeScreen from '@/components/features/home/home-screen-ui';
 
 export default function Home() {
   return (
     <main>
-       <HomeScreen />
+       <HomeScreen/>
     </main>
   );
 } 

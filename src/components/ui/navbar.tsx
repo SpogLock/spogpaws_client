@@ -74,11 +74,13 @@ export default function Navbar() {
                   text="I NEED A SPECIALIST" 
                   className="d-none d-lg-inline-block" 
                   customColor='#000000'
+                  textColor='#000000'
                 />
                 <OutlinedButton 
                   text="SPECIALIST" 
                   className="d-lg-none" 
                   customColor='#000000'
+                  textColor='#000000'
                 />
               </li>
 
@@ -158,35 +160,6 @@ export default function Navbar() {
                 <li className="nav-item py-2">
                   <a className="nav-link text-dark" href="/case-studies">Case Studies</a>
                 </li>
-                {/* User Login Section
-                {!user ? (
-                  <li className="nav-item py-2">
-                    <a className="nav-link text-dark" href="/login">
-                      <i className="bi bi-person-circle fs-4 d-block"></i>
-                      <div className="small">Login</div>
-                    </a>
-                  </li>
-                ) : (
-                  <li className="nav-item dropdown py-2">
-                    <a className="nav-link dropdown-toggle text-dark" href="#" id="userDropdownMobile" role="button"
-                      data-bs-toggle="dropdown">
-                      Account
-                    </a>
-                    <ul className="dropdown-menu">
-                      <li><a className="dropdown-item" href="/account">Manage Account</a></li>
-                      <li>
-                        <a className="dropdown-item" href="/logout"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            // Handle logout logic here
-                            console.log('Logout clicked');
-                          }}>
-                          Logout
-                        </a>
-                      </li>
-                    </ul>
-                  </li>
-                )} */}
               </ul>
             </div>
           </div>
