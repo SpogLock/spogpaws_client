@@ -1,7 +1,6 @@
 import { InputHTMLAttributes, forwardRef } from 'react';
-import { BaseComponentProps } from '@/types';
 
-interface InputProps extends InputHTMLAttributes<HTMLInputElement>, BaseComponentProps {
+interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   error?: string;
   helperText?: string;

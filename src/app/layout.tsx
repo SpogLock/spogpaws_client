@@ -1,12 +1,9 @@
-import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
-import './globals.css';
-import { Providers, ErrorBoundary, LoadingProvider } from '@/lib/providers';
+import Navbar from '@/components/ui/navbar';
+import { AppProviders } from '@/lib/providers';
+import './global.css';
 
-const inter = Inter({ subsets: ['latin'] });
-
-export const metadata: Metadata = {
-  title: 'Spog Paws - Connecting Vets with Pet Owners',
+export const metadata = {
+  title: 'SpogPaws - Connecting Vets with Pet Owners',
   description: 'A comprehensive platform for veterinary consultations, pet adoption, and pet care products.',
   keywords: ['veterinary', 'pets', 'adoption', 'pet care', 'consultation'],
   authors: [{ name: 'Spog Paws Team' }],
@@ -17,7 +14,7 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
   },
-};
+}
 
 export default function RootLayout({
   children,
@@ -26,16 +23,31 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <ErrorBoundary>
-          <Providers>
-            <LoadingProvider>
-              <div id="root">
-                {children}
-              </div>
-            </LoadingProvider>
-          </Providers>
-        </ErrorBoundary>
+      <head>
+        {/* Bootstrap CSS CDN */}
+        <link 
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" 
+          rel="stylesheet" 
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" 
+          crossOrigin="anonymous"
+        />
+        {/* Bootstrap Icons CDN */}
+        <link 
+          rel="stylesheet" 
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.css"
+        />
+      </head>
+      <body>
+        <AppProviders>
+          <Navbar />
+          {children}
+        </AppProviders>
+        {/* Bootstrap JS CDN */}
+        <script 
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" 
+          integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" 
+          crossOrigin="anonymous"
+        ></script>
       </body>
     </html>
   );
