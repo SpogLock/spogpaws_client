@@ -1,6 +1,6 @@
 # Spogpaws Client
 
-A Next.js client application for the Spogpaws veterinary platform, featuring user management, clinic administration, and pet adoption services.
+A Next.js client  application for the Spogpaws veterinary platform, featuring user management, clinic administration, and pet adoption services.
 
 ## 🚀 Quick Start
 
