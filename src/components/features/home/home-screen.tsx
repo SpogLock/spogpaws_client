@@ -1,13 +1,10 @@
 'use client';
-
-import { useEffect, useRef } from 'react';
-import { useAdoptionStore } from '@/services/adoption.service';
+import {useRef } from 'react';
 import UI from '@/components/ui/ui_core';
 import './home-screen.css';
-
+import Image from 'next/image';
 export default function HomeScreen() {
   const mainRef = useRef<HTMLElement>(null);
-
   return (
     <main ref={mainRef}>
       <HeroSection />
@@ -57,14 +54,14 @@ function HeroSection() {
             
             <div ref={cardsRef} className="adoption-cards-container mt-4">
               <div className="adoption-card">
-                <img src="https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=60&h=60&fit=crop&crop=face" alt="Pet" className="rounded-circle" />
+                <Image src="https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=60&h=60&fit=crop&crop=face" alt="Pet" className="rounded-circle" />
                 <div className="adoption-card-content">
                   <small className="text-white">SAVE A LIFE</small>
                   <div className="text-white-50 small">Rescue pets waiting</div>
                 </div>
               </div>
               <div className="adoption-card">
-                <img src="https://images.unsplash.com/photo-1574158622682-e40e69881006?w=60&h=60&fit=crop&crop=face" alt="Pet" className="rounded-circle" />
+                <Image src="https://images.unsplash.com/photo-1574158622682-e40e69881006?w=60&h=60&fit=crop&crop=face" alt="Pet" className="rounded-circle" />
                 <div className="adoption-card-content">
                   <small className="text-white">SAVE A LIFE</small>
                   <div className="text-white-50 small">Find your companion</div>
@@ -75,7 +72,7 @@ function HeroSection() {
           
           <div className="col-lg-6 col-md-4 text-center">
             <div className="hero-image-container">
-              <img 
+              <Image 
                 ref={imageRef}
                 src="/hero-img.png" 
                 alt="Cute puppy" 
@@ -203,15 +200,15 @@ function MobileAppSection() {
                 schedule veterinary appointments, and stay connected with our rescue community wherever you go.
               </p>
               <div className="app-store-buttons">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play" className="app-store-btn" />
-                <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="App Store" className="app-store-btn" />
+                <Image src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play" className="app-store-btn" />
+                <Image src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="App Store" className="app-store-btn" />
               </div>
             </div>
           </div>
           <div className="col-lg-6">
             <div ref={phonesRef} className="phone-mockups">
-              <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=250&h=500&fit=crop" alt="Phone mockup 1" className="phone-mockup" />
-              <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=250&h=500&fit=crop" alt="Phone mockup 2" className="phone-mockup" />
+              <Image src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=250&h=500&fit=crop" alt="Phone mockup 1" className="phone-mockup" />
+              <Image src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=250&h=500&fit=crop" alt="Phone mockup 2" className="phone-mockup" />
             </div>
           </div>
         </div>
@@ -247,13 +244,13 @@ function ImpactSection() {
               
               <div ref={cardsRef} className="story-cards">
                 <div className="story-card mb-3">
-                  <h6>Rescue Story: Max's Journey</h6>
+                  <h6>Rescue Story: Max&apos;s Journey</h6>
                   <p className="small">From abandoned puppy to beloved family member...</p>
                   <UI.OutlinedButton text="READ MORE" customColor='#10B981' textColor='#10B981' />
                 </div>
                 <div className="story-card">
                   <h6>Emergency Surgery Success</h6>
-                  <p className="small">How your donations saved Luna's life...</p>
+                  <p className="small">How your donations saved Luna&apos;s life...</p>
                   <UI.OutlinedButton text="READ MORE" customColor='#10B981' textColor='#10B981' />
                 </div>
               </div>
@@ -263,13 +260,13 @@ function ImpactSection() {
             <div ref={imagesRef} className="impact-images">
               <div className="row">
                 <div className="col-6 mb-3">
-                  <img src="https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=250&h=200&fit=crop" alt="Rescued pet" className="img-fluid rounded" />
+                  <Image src="https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=250&h=200&fit=crop" alt="Rescued pet" className="img-fluid rounded" />
                 </div>
                 <div className="col-6 mb-3">
-                  <img src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=250&h=200&fit=crop" alt="Volunteer work" className="img-fluid rounded" />
+                  <Image src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=250&h=200&fit=crop" alt="Volunteer work" className="img-fluid rounded" />
                 </div>
                 <div className="col-12">
-                  <img src="https://images.unsplash.com/photo-1615751072497-5f5169febe17?w=500&h=200&fit=crop" alt="Happy pets" className="img-fluid rounded" />
+                  <Image src="https://images.unsplash.com/photo-1615751072497-5f5169febe17?w=500&h=200&fit=crop" alt="Happy pets" className="img-fluid rounded" />
                 </div>
               </div>
             </div>
@@ -356,14 +353,14 @@ function TestimonialsSection() {
               <div className="testimonial-card card h-100">
                 <div className="card-body text-center">
                   <div className="testimonial-avatar-container">
-                    <img src={testimonial.avatar} alt={testimonial.name} className="testimonial-avatar" />
+                    <Image src={testimonial.avatar} alt={testimonial.name} className="testimonial-avatar" />
                   </div>
                   <div className="testimonial-rating my-3">
                     {[...Array(testimonial.rating)].map((_, i) => (
                       <span key={i} className="star">★</span>
                     ))}
                   </div>
-                  <p className="testimonial-text">"{testimonial.text}"</p>
+                  <p className="testimonial-text">&quot;{testimonial.text}&quot;</p>
                   <h6 className="testimonial-name">{testimonial.name}</h6>
                 </div>
               </div>

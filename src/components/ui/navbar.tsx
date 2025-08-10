@@ -1,16 +1,10 @@
 import FilledButton from './filled-button';
 import { OutlinedButton } from './ui_core';
 import Image from 'next/image';
+import Link from 'next/link';
 
-interface User {
-  name: string;
-  id: string;
-}
 
 export default function Navbar() {
-  // Mock user state - in a real app, this would come from your auth context/hook
-  const user: User | null = null; // Replace with actual auth state
-
   return (
     <div>
       <nav className="navbar navbar-expand-md bg-white py-3">
@@ -29,7 +23,7 @@ export default function Navbar() {
           <div className="collapse navbar-collapse d-none d-md-flex justify-content-end" id="navbarNav">
             <ul className="navbar-nav align-items-center gap-0">
               <li className="nav-item px-1 px-lg-3">
-                <a className="nav-link text-dark fw-medium" href="/">Home</a>
+                <Link className="nav-link text-dark fw-medium" href="/">Home</Link>
               </li>
               <li className="nav-item dropdown px-1 px-lg-3">
                 <a className="nav-link dropdown-toggle text-dark fw-medium" href="#" id="vetsDropdown" role="button"
@@ -101,7 +95,7 @@ export default function Navbar() {
                 </a>
               </li>
 
-              {user !== null && (
+              {/* {user !== null && (
                   <li className="nav-item dropdown px-3">
                   <a className="nav-link dropdown-toggle text-dark" href="#" id="userDropdown" role="button"
                     data-bs-toggle="dropdown">
@@ -110,18 +104,18 @@ export default function Navbar() {
                   <ul className="dropdown-menu">
                     <li><a className="dropdown-item" href="/account">Manage Account</a></li>
                     <li>
-                      <a className="dropdown-item" href="/logout"
+                      <Link className="dropdown-item" href="/logout"
                         onClick={(e) => {
                           e.preventDefault();
                           // Handle logout logic here
                           console.log('Logout clicked');
                         }}>
                         Logout
-                      </a>
+                      </Link>
                     </li>
                   </ul>
                 </li>
-              )}
+              )} */}
             </ul>
           </div>
 
@@ -138,7 +132,7 @@ export default function Navbar() {
                     href="/adoption">OWN A PET</a>
                 </li>
                 <li className="nav-item py-2">
-                  <a className="nav-link text-dark" href="/">Home</a>
+                  <Link className="nav-link text-dark" href="/">Home</Link>
                 </li>
                 <li className="nav-item dropdown py-2">
                   <a className="nav-link dropdown-toggle text-dark" href="#" id="vetsDropdownMobile" role="button"
@@ -164,7 +158,7 @@ export default function Navbar() {
                 <li className="nav-item py-2">
                   <a className="nav-link text-dark" href="/case-studies">Case Studies</a>
                 </li>
-                {/* User Login Section */}
+                {/* User Login Section
                 {!user ? (
                   <li className="nav-item py-2">
                     <a className="nav-link text-dark" href="/login">
@@ -192,7 +186,7 @@ export default function Navbar() {
                       </li>
                     </ul>
                   </li>
-                )}
+                )} */}
               </ul>
             </div>
           </div>
