@@ -255,7 +255,7 @@ export default function CardSlider({ cards, className = '' }: CardSliderProps) {
                     color: '#666'
                   }}
                 >
-                  "{card.description}"
+                  &ldquo;{card.description}&rdquo;
                 </Typography>
                 
                 {card.buttonText && (
