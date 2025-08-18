@@ -10,9 +10,9 @@ export default function Navbar() {
       <nav className="navbar navbar-expand-md bg-white py-3">
         <div className="container-fluid px-4">
           <div className="d-flex align-items-center flex-grow-1">
-            <a className="navbar-brand d-flex align-items-center me-5" href="#">
+            <Link className="navbar-brand d-flex align-items-center me-5" href="/">
               <Image src="/logo.png" alt="SpogPaws Logo" width={180} height={45} className="me-3 mb-3" />
-            </a>
+            </Link>
           </div>
 
           <button className="navbar-toggler d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu"
@@ -26,30 +26,30 @@ export default function Navbar() {
                 <Link className="nav-link text-dark fw-medium" href="/">Home</Link>
               </li>
               <li className="nav-item dropdown px-1 px-lg-3">
-                <a className="nav-link dropdown-toggle text-dark fw-medium" href="#" id="vetsDropdown" role="button"
+                <Link className="nav-link dropdown-toggle text-dark fw-medium" href="#" id="vetsDropdown" role="button"
                   data-bs-toggle="dropdown">
                   <span className="d-none d-lg-inline">For Veterinarians</span>
                   <span className="d-lg-none">For Vets</span>
-                </a>
+                </Link>
                 <ul className="dropdown-menu">
-                  <li><a className="dropdown-item" href="/vets/register">Become a vet</a></li>
-                  <li><a className="dropdown-item" href="#">Support</a></li>
+                  <li><Link className="dropdown-item" href="/vets/register">Become a vet</Link></li>
+                  <li><Link className="dropdown-item" href="#">Support</Link></li>
                 </ul>
               </li>
               <li className="nav-item dropdown px-1 px-lg-3">
-                <a className="nav-link dropdown-toggle text-dark fw-medium" href="#" id="petOwnerDropdown" role="button"
+                <Link className="nav-link dropdown-toggle text-dark fw-medium" href="#" id="petOwnerDropdown" role="button"
                   data-bs-toggle="dropdown">
                   <span className="d-none d-lg-inline">For Pet Owners</span>
                   <span className="d-lg-none">Pet Owners</span>
-                </a>
+                </Link>
                 <ul className="dropdown-menu">
-                  <li><a className="dropdown-item" href="/find-vets">Connect to vet</a></li>
-                  <li><a className="dropdown-item" href="/adoption">Adopt a pet</a></li>
-                  <li><a className="dropdown-item" href="/report-case">Report adoption</a></li>
+                  <li><Link className="dropdown-item" href="/find-vets">Connect to vet</Link></li>
+                  <li><Link className="dropdown-item" href="/adoption">Adopt a pet</Link></li>
+                  <li><Link className="dropdown-item" href="/report-case">Report adoption</Link></li>
                 </ul>
               </li>
               <li className="nav-item px-1 px-lg-3">
-                <a className="nav-link text-dark fw-medium" href="/case-studies">Case Studies</a>
+                <Link className="nav-link text-dark fw-medium" href="/case-studies">Case Studies</Link>
               </li>
 
               {/* Action Buttons */}
@@ -91,10 +91,10 @@ export default function Navbar() {
 
               {/* User Login Section */}
               <li className="nav-item px-1 px-lg-3">
-                <a className="nav-link text-dark text-center" href="/login">
+                <Link className="nav-link text-dark text-center" href="/login">
                   <i className="bi bi-person-circle fs-4 d-block"></i>
                   <div className="small mt-1">Login</div>
-                </a>
+                </Link>
               </li>
 
               {/* {user !== null && (
@@ -130,35 +130,35 @@ export default function Navbar() {
             <div className="offcanvas-body">
               <ul className="navbar-nav">
                 <li className="nav-item py-2 border-top mt-2 pt-3">
-                  <a className="btn btn-teal rounded-pill text-white px-4 py-2 w-100"
-                    href="/adoption">OWN A PET</a>
+                  <Link className="btn btn-teal rounded-pill text-white px-4 py-2 w-100"
+                    href="/adoption">OWN A PET</Link>
                 </li>
                 <li className="nav-item py-2">
                   <Link className="nav-link text-dark" href="/">Home</Link>
                 </li>
                 <li className="nav-item dropdown py-2">
-                  <a className="nav-link dropdown-toggle text-dark" href="#" id="vetsDropdownMobile" role="button"
+                  <Link className="nav-link dropdown-toggle text-dark" href="#" id="vetsDropdownMobile" role="button"
                     data-bs-toggle="dropdown">
                     For Vets
-                  </a>
+                  </Link>
                   <ul className="dropdown-menu">
-                    <li><a className="dropdown-item" href="/vets/register">Become a vet</a></li>
-                    <li><a className="dropdown-item" href="#">Support</a></li>
+                    <li><Link className="dropdown-item" href="/vets/register">Become a vet</Link></li>
+                    <li><Link className="dropdown-item" href="#">Support</Link></li>
                   </ul>
                 </li>
                 <li className="nav-item dropdown py-2">
-                  <a className="nav-link dropdown-toggle text-dark" href="#" id="petOwnerDropdownMobile" role="button"
+                  <Link className="nav-link dropdown-toggle text-dark" href="#" id="petOwnerDropdownMobile" role="button"
                     data-bs-toggle="dropdown">
                     For Pet Owners
-                  </a>
+                  </Link>
                   <ul className="dropdown-menu">
-                    <li><a className="dropdown-item" href="/find-vets">Connect to vet</a></li>
-                    <li><a className="dropdown-item" href="/adoption">Adopt a pet</a></li>
-                    <li><a className="dropdown-item" href="/report-case">Report adoption</a></li>
+                    <li><Link className="dropdown-item" href="/find-vets">Connect to vet</Link></li>
+                    <li><Link className="dropdown-item" href="/adoption">Adopt a pet</Link></li>
+                    <li><Link className="dropdown-item" href="/report-case">Report adoption</Link></li>
                   </ul>
                 </li>
                 <li className="nav-item py-2">
-                  <a className="nav-link text-dark" href="/case-studies">Case Studies</a>
+                  <Link className="nav-link text-dark" href="/case-studies">Case Studies</Link>
                 </li>
               </ul>
             </div>

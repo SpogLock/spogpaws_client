@@ -4,6 +4,8 @@ import { Card, CardContent, Typography, Button, Box } from '@mui/material';
 import './petcare-section.css';
 import { Verified } from '@mui/icons-material';
 import CardSlider from '../../../../ui/card-slider';
+import OutlinedButton from '../../../../ui/outlined-button';
+import FilledButton from '@/components/ui/filled-button';
 
 const vetCards = [
   {
@@ -147,8 +149,6 @@ export default function PetCareSection() {
                     background: 'white', 
                     color: '#000',
                     fontWeight: 'bold',
-                    px: 4,
-                    py: 1.5,
                     '&:hover': {
                       background: '#f5f5f5'
                     }
@@ -165,6 +165,19 @@ export default function PetCareSection() {
         <div className='row'>
           <div className='col-12'>
             <CardSlider cards={vetCards} />
+          </div>
+        </div>
+        <div className='row pt-5'>
+          <div className='col-12'>
+            <div className='d-flex justify-content-center'>
+              <FilledButton
+                text="VIEW ALL"
+                customColor='#25EBC3'
+                textColor='#000'
+                onClick={() => {}}
+                className='justify-content-center d-flex'
+              />
+            </div>
           </div>
         </div>
       </div>

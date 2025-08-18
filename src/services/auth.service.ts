@@ -67,8 +67,8 @@ export const useAuthStore = create<AuthState>()(
           } else {
             throw new Error(response.message || 'Login failed');
           }
-        } catch (error: any) {
-          const errorMessage = error.message || 'Login failed';
+        } catch (error: unknown) {
+          const errorMessage = error instanceof Error ? error.message : 'Login failed';
           set({
             loading: { isLoading: false, error: errorMessage },
             isAuthenticated: false,
@@ -91,8 +91,8 @@ export const useAuthStore = create<AuthState>()(
           } else {
             throw new Error(response.message || 'Registration failed');
           }
-        } catch (error: any) {
-          const errorMessage = error.message || 'Registration failed';
+        } catch (error: unknown) {
+          const errorMessage = error instanceof Error ? error.message : 'Registration failed';
           set({
             loading: { isLoading: false, error: errorMessage },
           });
@@ -131,25 +131,33 @@ export const useAuthStore = create<AuthState>()(
             return response.data;
           }
           return null;
-        } catch (error: any) {
+        } catch (error: unknown) {
           return null;
         }
       },
 
       initializeAuth: async (): Promise<void> => {
-        const authRepo = repositoryFactory.getAuthRepository() as any;
+        const authRepo = repositoryFactory.getAuthRepository();
         
         try {
           set({ loading: { isLoading: true, error: null } });
           
-          const user = await authRepo.initializeAuth();
+          const response = await authRepo.getCurrentUser();
           
-          set({
-            user,
-            isAuthenticated: !!user,
-            loading: { isLoading: false, error: null },
-          });
-        } catch (error: any) {
+          if (response.status === 'success' && response.data) {
+            set({
+              user: response.data,
+              isAuthenticated: true,
+              loading: { isLoading: false, error: null },
+            });
+          } else {
+            set({
+              user: null,
+              isAuthenticated: false,
+              loading: { isLoading: false, error: null },
+            });
+          }
+        } catch (error: unknown) {
           set({
             user: null,
             isAuthenticated: false,

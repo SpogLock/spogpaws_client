@@ -55,8 +55,8 @@ export const useClinicStore = create<ClinicState>((set, get) => ({
       } else {
         throw new Error(response.message || 'Failed to fetch clinics');
       }
-    } catch (error: any) {
-      const errorMessage = error.message || 'Failed to fetch clinics';
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to fetch clinics';
       set({
         loading: { isLoading: false, error: errorMessage },
       });
@@ -81,8 +81,8 @@ export const useClinicStore = create<ClinicState>((set, get) => ({
       } else {
         throw new Error(response.message || 'Failed to fetch clinic');
       }
-    } catch (error: any) {
-      const errorMessage = error.message || 'Failed to fetch clinic';
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to fetch clinic';
       set({
         loading: { isLoading: false, error: errorMessage },
       });
@@ -108,8 +108,8 @@ export const useClinicStore = create<ClinicState>((set, get) => ({
       } else {
         throw new Error(response.message || 'Failed to create clinic');
       }
-    } catch (error: any) {
-      const errorMessage = error.message || 'Failed to create clinic';
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to create clinic';
       set({
         loading: { isLoading: false, error: errorMessage },
       });
@@ -138,8 +138,8 @@ export const useClinicStore = create<ClinicState>((set, get) => ({
       } else {
         throw new Error(response.message || 'Failed to update clinic');
       }
-    } catch (error: any) {
-      const errorMessage = error.message || 'Failed to update clinic';
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to update clinic';
       set({
         loading: { isLoading: false, error: errorMessage },
       });
@@ -160,8 +160,8 @@ export const useClinicStore = create<ClinicState>((set, get) => ({
       } else {
         throw new Error(response.message || 'Failed to request approval');
       }
-    } catch (error: any) {
-      const errorMessage = error.message || 'Failed to request approval';
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to request approval';
       set({
         loading: { isLoading: false, error: errorMessage },
       });

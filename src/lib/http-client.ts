@@ -1,7 +1,15 @@
 // HTTP Client implementation for Spogpaws API
 // Updated to match documented API response structure
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 import { IHttpClient, IApiConfig, ApiResponse } from '@/types';
+
+interface RetryConfig extends AxiosRequestConfig {
+  __retryCount?: number;
+}
+
+interface ApiError extends AxiosError {
+  code?: string;
+}
 
 export class HttpClient implements IHttpClient {
   private client: AxiosInstance;
@@ -79,7 +87,7 @@ export class HttpClient implements IHttpClient {
     );
   }
 
-  private shouldRetry(error: any): boolean {
+  private shouldRetry(error: ApiError): boolean {
     // Retry on network errors or 5xx server errors
     return (
       !error.response || 
@@ -89,11 +97,11 @@ export class HttpClient implements IHttpClient {
     );
   }
 
-  private getRetryCount(config: any): number {
+  private getRetryCount(config: RetryConfig): number {
     return config.__retryCount || 0;
   }
 
-  private incrementRetryCount(config: any): void {
+  private incrementRetryCount(config: RetryConfig): void {
     config.__retryCount = this.getRetryCount(config) + 1;
   }
 
@@ -101,18 +109,23 @@ export class HttpClient implements IHttpClient {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
-  private transformError(error: any): ApiResponse {
+  private transformError(error: ApiError): ApiResponse {
     if (error.response?.data) {
       // If response has data in Spogpaws format, return it
-      if (error.response.data.status && error.response.data.statusCode) {
-        return error.response.data;
+      const responseData = error.response.data as Record<string, unknown>;
+      if (responseData.status && responseData.statusCode) {
+        return {
+          status: (responseData.status as string) === 'success' ? 'success' : 'error',
+          statusCode: responseData.statusCode as number,
+          message: (responseData.message as string) || 'An error occurred'
+        };
       }
       
       // Transform to Spogpaws format
       return {
         status: 'error',
         statusCode: error.response.status,
-        message: error.response.data.message || 'An error occurred'
+        message: (responseData.message as string) || 'An error occurred'
       };
     }
 
@@ -155,17 +168,17 @@ export class HttpClient implements IHttpClient {
     return response.data;
   }
 
-  async post<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
+  async post<T>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<T> {
     const response = await this.client.post<T>(url, data, config);
     return response.data;
   }
 
-  async put<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
+  async put<T>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<T> {
     const response = await this.client.put<T>(url, data, config);
     return response.data;
   }
 
-  async patch<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
+  async patch<T>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<T> {
     const response = await this.client.patch<T>(url, data, config);
     return response.data;
   }

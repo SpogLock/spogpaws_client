@@ -36,15 +36,15 @@ export abstract class BaseRepository<T, TCreate, TUpdate> implements IBaseReposi
     return this.httpClient.get<ApiResponse<TResult>>(endpoint);
   }
 
-  protected async post<TResult>(endpoint: string, data?: any): Promise<ApiResponse<TResult>> {
+  protected async post<TResult>(endpoint: string, data?: unknown): Promise<ApiResponse<TResult>> {
     return this.httpClient.post<ApiResponse<TResult>>(endpoint, data);
   }
 
-  protected async put<TResult>(endpoint: string, data?: any): Promise<ApiResponse<TResult>> {
+  protected async put<TResult>(endpoint: string, data?: unknown): Promise<ApiResponse<TResult>> {
     return this.httpClient.put<ApiResponse<TResult>>(endpoint, data);
   }
 
-  protected async patch<TResult>(endpoint: string, data?: any): Promise<ApiResponse<TResult>> {
+  protected async patch<TResult>(endpoint: string, data?: unknown): Promise<ApiResponse<TResult>> {
     return this.httpClient.patch<ApiResponse<TResult>>(endpoint, data);
   }
 
@@ -53,7 +53,7 @@ export abstract class BaseRepository<T, TCreate, TUpdate> implements IBaseReposi
   }
 
   // Helper method for building query parameters
-  protected buildQueryParams(params: Record<string, any>): string {
+  protected buildQueryParams(params: Record<string, unknown>): string {
     const searchParams = new URLSearchParams();
     
     Object.entries(params).forEach(([key, value]) => {
@@ -70,13 +70,13 @@ export abstract class BaseRepository<T, TCreate, TUpdate> implements IBaseReposi
   }
 
   // Helper method for handling file uploads
-  protected async uploadFiles(endpoint: string, files: File[]): Promise<ApiResponse<any>> {
+  protected async uploadFiles(endpoint: string, files: File[]): Promise<ApiResponse<unknown>> {
     const formData = new FormData();
     files.forEach((file, index) => {
       formData.append(`file${index}`, file);
     });
 
-    return this.httpClient.post<ApiResponse<any>>(endpoint, formData, {
+    return this.httpClient.post<ApiResponse<unknown>>(endpoint, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -84,11 +84,11 @@ export abstract class BaseRepository<T, TCreate, TUpdate> implements IBaseReposi
   }
 
   // Helper method for handling single file upload
-  protected async uploadFile(endpoint: string, file: File): Promise<ApiResponse<any>> {
+  protected async uploadFile(endpoint: string, file: File): Promise<ApiResponse<unknown>> {
     const formData = new FormData();
     formData.append('file', file);
 
-    return this.httpClient.post<ApiResponse<any>>(endpoint, formData, {
+    return this.httpClient.post<ApiResponse<unknown>>(endpoint, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
