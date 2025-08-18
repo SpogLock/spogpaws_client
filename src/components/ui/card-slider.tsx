@@ -283,7 +283,7 @@ export default function CardSlider({ cards, className = '' }: CardSliderProps) {
       </Box>
 
       {/* Dots Indicator */}
-      <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1, mt: 4 }}>
+      {/* <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1, mt: 4 }}>
         {cards.map((_, index) => (
           <Box
             key={index}
@@ -305,7 +305,7 @@ export default function CardSlider({ cards, className = '' }: CardSliderProps) {
             }}
           />
         ))}
-      </Box>
+      </Box> */}
     </div>
   );
 }

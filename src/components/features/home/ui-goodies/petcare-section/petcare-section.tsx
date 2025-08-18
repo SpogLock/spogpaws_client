@@ -92,7 +92,7 @@ export default function PetCareSection() {
           <div className='col-12'>
             <Card 
               sx={{
-                background: 'linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)',
+                background: '#6848BD',
                 color: 'white',
                 borderRadius: 4,
                 position: 'relative',
@@ -135,7 +135,7 @@ export default function PetCareSection() {
               </Box>
               
               <CardContent sx={{ p: 4, textAlign: 'center' }}>
-                <Typography variant="h4" component="h2" sx={{ mb: 2 }}>
+                <Typography className='pt-5' variant="h4" component="h2" sx={{ mb: 2 }}>
                   TOP VERIFIED VETS
                 </Typography>
                 <Typography variant="body1" sx={{ mb: 3, fontSize: '1.1rem' }}>
@@ -144,7 +144,7 @@ export default function PetCareSection() {
                   or find a specialist in your area.
                 </Typography>
                 <Button 
-                  variant="contained" 
+                  variant="contained" className='mb-5'
                   sx={{ 
                     background: 'white', 
                     color: '#000',
