@@ -4,7 +4,6 @@ import { Card, CardContent, Typography, Button, Box } from '@mui/material';
 import './petcare-section.css';
 import { Verified } from '@mui/icons-material';
 import CardSlider from '../../../../ui/card-slider';
-import OutlinedButton from '../../../../ui/outlined-button';
 import FilledButton from '@/components/ui/filled-button';
 
 const vetCards = [

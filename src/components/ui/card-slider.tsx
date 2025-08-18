@@ -31,16 +31,29 @@ export default function CardSlider({ cards, className = '' }: CardSliderProps) {
   const sliderRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
 
+  const getVisibleCards = () => {
+    return 3; // Fixed number of visible cards
+  };
+
   const nextSlide = () => {
     if (isAnimating) return;
-    setIsAnimating(true);
-    setCurrentIndex((prev) => (prev + 1) % cards.length);
+    const maxIndex = Math.max(0, cards.length - getVisibleCards());
+    
+    if (currentIndex >= maxIndex) {
+      setIsAnimating(true);
+      setCurrentIndex(0); // Reset to beginning
+    } else {
+      setIsAnimating(true);
+      setCurrentIndex(prev => prev + 1);
+    }
   };
 
   const prevSlide = () => {
     if (isAnimating) return;
+    if (currentIndex <= 0) return;
+    
     setIsAnimating(true);
-    setCurrentIndex((prev) => (prev - 1 + cards.length) % cards.length);
+    setCurrentIndex((prev) => Math.max(0, prev - 1));
   };
 
   // Touch handlers for mobile swipe
@@ -59,25 +72,24 @@ export default function CardSlider({ cards, className = '' }: CardSliderProps) {
     const isLeftSwipe = distance > 50;
     const isRightSwipe = distance < -50;
 
-    if (isLeftSwipe) {
+    const visibleCards = getVisibleCards();
+    const maxIndex = Math.max(0, cards.length - visibleCards);
+
+    if (isLeftSwipe && currentIndex < maxIndex) {
       nextSlide();
     }
-    if (isRightSwipe) {
+    if (isRightSwipe && currentIndex > 0) {
       prevSlide();
     }
   };
 
   useEffect(() => {
     if (sliderRef.current) {
-      // Calculate the slide width based on screen size
-      const slideWidth = window.innerWidth <= 576 ? 280 : 
-                        window.innerWidth <= 768 ? 320 : 
-                        window.innerWidth <= 1200 ? 350 : 400;
-      const gap = window.innerWidth <= 576 ? 24 : 
-                  window.innerWidth <= 768 ? 32 : 48;
+      const cardWidth = (sliderRef.current.parentElement?.clientWidth || window.innerWidth - 48) / 3;
+      const gap = 24;
       
       gsap.to(sliderRef.current, {
-        x: -currentIndex * (slideWidth + gap),
+        x: -currentIndex * (cardWidth + gap),
         duration: 0.5,
         ease: "power2.out",
         onComplete: () => setIsAnimating(false)
@@ -89,12 +101,20 @@ export default function CardSlider({ cards, className = '' }: CardSliderProps) {
   useEffect(() => {
     const interval = setInterval(() => {
       if (!isAnimating) {
-        nextSlide();
+        const visibleCards = getVisibleCards();
+        const maxIndex = Math.max(0, cards.length - visibleCards);
+        
+        if (currentIndex >= maxIndex) {
+          // Reset to beginning when reaching the end
+          setCurrentIndex(0);
+        } else {
+          nextSlide();
+        }
       }
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [isAnimating]);
+  }, [isAnimating, currentIndex, cards.length]);
 
   // Handle window resize
   useEffect(() => {
@@ -121,11 +141,10 @@ export default function CardSlider({ cards, className = '' }: CardSliderProps) {
       <Box 
         sx={{ 
           position: 'relative', 
-          overflowX: 'hidden', 
-          overflowY: 'visible', 
-          paddingLeft: '24px', 
-          paddingRight: '24px', 
-          paddingTop: { xs: '56px', md: '64px' } 
+          overflowX: 'hidden',
+          overflowY: 'visible',
+          paddingX: '24px',
+          paddingTop: { xs: '56px', md: '64px' }
         }}
         onTouchStart={onTouchStart}
         onTouchMove={onTouchMove}
@@ -175,9 +194,11 @@ export default function CardSlider({ cards, className = '' }: CardSliderProps) {
           ref={sliderRef}
           sx={{
             display: 'flex',
-            gap: { xs: 1.5, sm: 2, md: 3 },
+            gap: 3,
             transition: 'transform 0.5s ease-out',
-            minWidth: `${cards.length * 100}%`
+            '& > *': {
+              flex: '0 0 calc(33.33% - 16px)'
+            }
           }}
         >
           {cards.map((card, index) => (
