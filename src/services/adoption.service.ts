@@ -55,8 +55,8 @@ export const useAdoptionStore = create<AdoptionState>((set, get) => ({
       } else {
         throw new Error(response.message || 'Failed to fetch adoptions');
       }
-    } catch (error: any) {
-      const errorMessage = error.message || 'Failed to fetch adoptions';
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to fetch adoptions';
       set({
         loading: { isLoading: false, error: errorMessage },
       });
@@ -81,8 +81,8 @@ export const useAdoptionStore = create<AdoptionState>((set, get) => ({
       } else {
         throw new Error(response.message || 'Failed to fetch adoption');
       }
-    } catch (error: any) {
-      const errorMessage = error.message || 'Failed to fetch adoption';
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to fetch adoption';
       set({
         loading: { isLoading: false, error: errorMessage },
       });
@@ -108,8 +108,8 @@ export const useAdoptionStore = create<AdoptionState>((set, get) => ({
       } else {
         throw new Error(response.message || 'Failed to create adoption listing');
       }
-    } catch (error: any) {
-      const errorMessage = error.message || 'Failed to create adoption listing';
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to create adoption listing';
       set({
         loading: { isLoading: false, error: errorMessage },
       });
@@ -138,8 +138,8 @@ export const useAdoptionStore = create<AdoptionState>((set, get) => ({
       } else {
         throw new Error(response.message || 'Failed to update adoption listing');
       }
-    } catch (error: any) {
-      const errorMessage = error.message || 'Failed to update adoption listing';
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to update adoption listing';
       set({
         loading: { isLoading: false, error: errorMessage },
       });
@@ -165,8 +165,8 @@ export const useAdoptionStore = create<AdoptionState>((set, get) => ({
       } else {
         throw new Error(response.message || 'Failed to delete adoption listing');
       }
-    } catch (error: any) {
-      const errorMessage = error.message || 'Failed to delete adoption listing';
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to delete adoption listing';
       set({
         loading: { isLoading: false, error: errorMessage },
       });

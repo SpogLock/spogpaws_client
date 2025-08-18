@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { useClinicStore } from '@/services/clinic.service';
-import { Button } from '@/components/ui/outlined-button';
+import Button from '@/components/ui/outlined-button';
 import { ClinicDto } from '@/types';
 
 interface ClinicCardProps {
@@ -24,11 +24,9 @@ function ClinicCard({ clinic, onViewDetails }: ClinicCardProps) {
       </div>
       <div className="mt-4">
         <Button 
-          variant="secondary" 
+          text="View Details"
           onClick={() => onViewDetails(clinic)}
-        >
-          View Details
-        </Button>
+        />
       </div>
     </div>
   );

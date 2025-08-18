@@ -71,7 +71,7 @@ export default function MaterialDemo() {
                   Pet Care Services
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Connect with qualified veterinarians for your pet's health and wellness needs.
+                  Connect with qualified veterinarians for your pet&apos;s health and wellness needs.
                 </Typography>
               </CardContent>
               <CardActions>

@@ -2,7 +2,7 @@
 // Based on documented API structure
 
 // Base API Response Structure (matches documentation)
-export interface ApiResponse<T = any> {
+export interface ApiResponse<T = unknown> {
   status: "success" | "error";
   statusCode: number;
   message: string;

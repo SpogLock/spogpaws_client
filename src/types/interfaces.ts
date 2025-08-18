@@ -21,11 +21,11 @@ import {
 
 // HTTP Client Interface
 export interface IHttpClient {
-  get<T>(url: string, config?: any): Promise<T>;
-  post<T>(url: string, data?: any, config?: any): Promise<T>;
-  put<T>(url: string, data?: any, config?: any): Promise<T>;
-  patch<T>(url: string, data?: any, config?: any): Promise<T>;
-  delete<T>(url: string, config?: any): Promise<T>;
+  get<T>(url: string, config?: unknown): Promise<T>;
+  post<T>(url: string, data?: unknown, config?: unknown): Promise<T>;
+  put<T>(url: string, data?: unknown, config?: unknown): Promise<T>;
+  patch<T>(url: string, data?: unknown, config?: unknown): Promise<T>;
+  delete<T>(url: string, config?: unknown): Promise<T>;
   setAuthToken(token: string): void;
   removeAuthToken(): void;
 }

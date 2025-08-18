@@ -1,0 +1,107 @@
+.card-slider {
+  position: relative;
+  width: 100%;
+}
+
+.card-slider .MuiCard-root {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-slider .MuiCard-root:hover {
+  transform: translateY(-10px);
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .card-slider .MuiCard-root {
+    min-width: 280px !important;
+    max-width: 320px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .card-slider .MuiCard-root {
+    min-width: 260px !important;
+    max-width: 300px !important;
+  }
+  
+  .card-slider .MuiBox-root {
+    gap: 2rem !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .card-slider .MuiCard-root {
+    min-width: 240px !important;
+    max-width: 280px !important;
+  }
+  
+  .card-slider .MuiBox-root {
+    gap: 1.5rem !important;
+  }
+}
+
+/* Animation Enhancements */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.card-slider .MuiCard-root:hover {
+  animation: float 2s ease-in-out infinite;
+}
+
+/* Custom Scrollbar for Webkit browsers */
+.card-slider ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.card-slider ::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.card-slider ::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+  border-radius: 4px;
+}
+
+.card-slider ::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #5a0bb0 0%, #1565c0 100%);
+}
+
+/* Loading Animation */
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+.card-slider .loading {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200px 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Focus States for Accessibility */
+.card-slider .MuiButton-root:focus,
+.card-slider .MuiIconButton-root:focus {
+  outline: 2px solid #6a11cb;
+  outline-offset: 2px;
+}
+
+/* Print Styles */
+@media print {
+  .card-slider .MuiCard-root {
+    box-shadow: none !important;
+    border: 1px solid #ddd !important;
+  }
+}
