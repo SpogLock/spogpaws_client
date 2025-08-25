@@ -32,7 +32,12 @@ export default function CardSlider({ cards, className = '' }: CardSliderProps) {
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
 
   const getVisibleCards = () => {
-    return 3; // Fixed number of visible cards
+    if (typeof window !== 'undefined') {
+      if (window.innerWidth <= 576) return 1; // Mobile: 1 card
+      if (window.innerWidth <= 768) return 2; // Tablet: 2 cards  
+      if (window.innerWidth <= 1200) return 2; // Small desktop: 2 cards
+    }
+    return 3; // Large desktop: 3 cards
   };
 
   const nextSlide = () => {
@@ -85,8 +90,10 @@ export default function CardSlider({ cards, className = '' }: CardSliderProps) {
 
   useEffect(() => {
     if (sliderRef.current) {
-      const cardWidth = (sliderRef.current.parentElement?.clientWidth || window.innerWidth - 48) / 3;
-      const gap = 24;
+      const visibleCards = getVisibleCards();
+      const containerWidth = sliderRef.current.parentElement?.clientWidth || window.innerWidth - 48;
+      const cardWidth = containerWidth / visibleCards;
+      const gap = window.innerWidth <= 576 ? 16 : window.innerWidth <= 768 ? 20 : 24;
       
       gsap.to(sliderRef.current, {
         x: -currentIndex * (cardWidth + gap),
@@ -120,14 +127,13 @@ export default function CardSlider({ cards, className = '' }: CardSliderProps) {
   useEffect(() => {
     const handleResize = () => {
       if (sliderRef.current) {
-        const slideWidth = window.innerWidth <= 576 ? 280 : 
-                          window.innerWidth <= 768 ? 320 : 
-                          window.innerWidth <= 1200 ? 350 : 400;
-        const gap = window.innerWidth <= 576 ? 24 : 
-                    window.innerWidth <= 768 ? 32 : 48;
+        const visibleCards = getVisibleCards();
+        const containerWidth = sliderRef.current.parentElement?.clientWidth || window.innerWidth - 48;
+        const cardWidth = containerWidth / visibleCards;
+        const gap = window.innerWidth <= 576 ? 16 : window.innerWidth <= 768 ? 20 : 24;
         
         gsap.set(sliderRef.current, {
-          x: -currentIndex * (slideWidth + gap)
+          x: -currentIndex * (cardWidth + gap)
         });
       }
     };
@@ -194,10 +200,15 @@ export default function CardSlider({ cards, className = '' }: CardSliderProps) {
           ref={sliderRef}
           sx={{
             display: 'flex',
-            gap: 3,
+            gap: { xs: 2, sm: 2.5, md: 3 },
             transition: 'transform 0.5s ease-out',
             '& > *': {
-              flex: '0 0 calc(33.33% - 16px)'
+              flex: { 
+                xs: '0 0 calc(100% - 16px)', // Mobile: 1 card takes full width
+                sm: '0 0 calc(50% - 12px)',  // Tablet: 2 cards
+                md: '0 0 calc(50% - 12px)',  // Small desktop: 2 cards
+                lg: '0 0 calc(33.33% - 16px)' // Large desktop: 3 cards
+              }
             }
           }}
         >
@@ -208,8 +219,8 @@ export default function CardSlider({ cards, className = '' }: CardSliderProps) {
                 cardsRef.current[index] = el;
               }}
               sx={{
-                minWidth: { xs: '240px', sm: '280px', md: '320px', lg: '350px' },
-                maxWidth: { xs: '280px', sm: '320px', md: '350px', lg: '400px' },
+                minWidth: { xs: 'calc(100vw - 64px)', sm: '280px', md: '320px', lg: '350px' },
+                maxWidth: { xs: 'calc(100vw - 64px)', sm: '320px', md: '350px', lg: '400px' },
                 background: 'white',
                 borderRadius: 4,
                 boxShadow: 'none',

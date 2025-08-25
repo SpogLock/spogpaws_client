@@ -1,9 +1,59 @@
-.home-screen{
-    background-color: #6848BD;
+.home-screen {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    background-color: #6848BD; /* Fallback color */
+}
+
+/* Background Video Styles */
+.background-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+}
+
+/* Content Overlay */
+.content-overlay {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    background: rgba(103, 72, 189, 0.262); /* Purple overlay for better text readability */
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
 }
 
 .hero-heading-span {
     color: #25EBC3;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .home-screen {
+        min-height: 90vh;
+    }
+    
+    .content-overlay {
+        min-height: 90vh;
+        background: rgba(104, 72, 189, 0.6); /* Darker overlay on mobile for better readability */
+    }
+}
+
+@media (max-width: 576px) {
+    .home-screen {
+        min-height: 80vh;
+    }
+    
+    .content-overlay {
+        min-height: 80vh;
+        background: rgba(104, 72, 189, 0.7);
+    }
 }
 
 

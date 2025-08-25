@@ -59,7 +59,7 @@ button,
 
 p {
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 2vh;
+  font-size: 3vh;
 }
 
 .section-heading {
@@ -82,6 +82,113 @@ button *,
 /* Ensure proper layout for main content */
 main {
   overflow-x: hidden;
+}
+
+/* Prevent horizontal scrollbars globally */
+body, html {
+  overflow-x: hidden;
+  max-width: 100vw;
+  width: 100%;
+}
+
+/* Global container overflow prevention - EXCLUDING NAVBAR */
+main .container, 
+main .container-fluid, 
+main .container-sm, 
+main .container-md, 
+main .container-lg, 
+main .container-xl, 
+main .container-xxl,
+section .container,
+section .container-fluid,
+.app-section .container,
+.petcare-section .container,
+.landing-section .container {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Prevent any element from causing horizontal overflow - EXCLUDING NAVBAR */
+main *,
+section *,
+.app-section *,
+.petcare-section *,
+.landing-section * {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Specific fixes for common overflow causes - EXCLUDING NAVBAR */
+main .row,
+section .row {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  max-width: 100%;
+}
+
+main .col, main .col-1, main .col-2, main .col-3, main .col-4, main .col-5, main .col-6, 
+main .col-7, main .col-8, main .col-9, main .col-10, main .col-11, main .col-12,
+main .col-auto, main .col-sm, main .col-md, main .col-lg, main .col-xl, main .col-xxl,
+main [class*="col-"],
+section .col, section [class*="col-"] {
+  padding-left: 15px;
+  padding-right: 15px;
+  max-width: 100%;
+}
+
+/* Responsive padding adjustments - EXCLUDING NAVBAR */
+@media (max-width: 768px) {
+  main .col, main [class*="col-"],
+  section .col, section [class*="col-"] {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}
+
+@media (max-width: 576px) {
+  main .col, main [class*="col-"],
+  section .col, section [class*="col-"] {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+}
+
+/* Flexbox overflow prevention - EXCLUDING NAVBAR */
+main .d-flex, main .flex-row, main .flex-column,
+section .d-flex, section .flex-row, section .flex-column {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Navbar specific styles - ALLOW OVERFLOW FOR DROPDOWNS */
+.navbar {
+  overflow: visible !important;
+}
+
+.navbar .dropdown-menu {
+  overflow: visible !important;
+  max-width: none !important;
+  white-space: nowrap;
+  z-index: 1050;
+}
+
+.navbar .dropdown {
+  overflow: visible !important;
+  position: relative;
+}
+
+.navbar .offcanvas {
+  overflow: visible !important;
+  max-width: none !important;
+}
+
+.navbar .container-fluid {
+  overflow: visible !important;
+  max-width: none !important;
+}
+
+.navbar * {
+  max-width: none !important;
 }
 
 /* Smooth scrolling */

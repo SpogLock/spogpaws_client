@@ -137,11 +137,11 @@ export default function PetCareSection() {
                 <Typography className='pt-5' variant="h4" component="h2" sx={{ mb: 2 }}>
                   TOP VERIFIED VETS
                 </Typography>
-                <Typography variant="body1" sx={{ mb: 3, fontSize: '1.1rem' }}>
+                <p>
                   Connect with the best veterinary professionals and verified Clinics,
                   <Box component="span" sx={{ display: { xs: 'none', md: 'inline' } }}><br/></Box>
                   or find a specialist in your area.
-                </Typography>
+                </p>
                 <Button 
                   variant="contained" className='mb-5'
                   sx={{ 
